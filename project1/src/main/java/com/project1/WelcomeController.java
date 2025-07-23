@@ -26,4 +26,4 @@ public class WelcomeController {
         SceneChanger.switchScene(event, "SignUp.fxml");
     }
 }
-//deneme
+
