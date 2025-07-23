@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.project1.MainDashboardController"
+            stylesheets="@../style/main_dashboard.css">
+
+  <!-- Üst Menü Bar -->
+  <top>
+    <HBox fx:id="menuBar"
+          styleClass="menu-bar"
+          alignment="CENTER_LEFT"
+          spacing="22"
+          prefHeight="60">
+      <padding>
+        <Insets top="10" right="28" bottom="10" left="28"/>
+      </padding>
+
+      <!-- Uygulama Logosu -->
+      <ImageView fx:id="appLogo"
+           styleClass="app-logo"
+           pickOnBounds="true"
+           preserveRatio="true"
+           fitHeight="72"/>
+
+      <Region prefWidth="16"/>
+
+      <!-- Bilkent Logo Daire -->
+     <StackPane>
+  <ImageView fx:id="bilkentLogo"
+             styleClass="logo-image"
+             pickOnBounds="true"
+             preserveRatio="true"
+             fitHeight="72">
+    <clip>
+      <Circle radius="36" centerX="36" centerY="36"/>
+    </clip>
+  </ImageView>
+</StackPane>
+
+      <Pane HBox.hgrow="ALWAYS"/>
+
+      <!-- Menü Öğeleri -->
+      <Label text="Contacts"  styleClass="menu-item"/>
+      <Label text="Campaigns" styleClass="menu-item"/>
+
+      <!-- Profil Butonu (Dikkat: Sadece profile-button class!) -->
+      <Button fx:id="profileButton"
+              text="Profile"
+              onAction="#onProfileButtonClicked"
+              styleClass="profile-button"/>
+    </HBox>
+  </top>
+
+  <!-- Ortadaki İçerik -->
+  <center>
+    <VBox styleClass="center-content"
+          spacing="18">
+      <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+      </padding>
+
+      <Label text="Welcome to the Event Platform!"
+             styleClass="welcome-label"/>
+      <Label text="Explore Events"
+             styleClass="section-label"/>
+
+      <!-- Search Bar -->
+      <HBox styleClass="search-bar"
+            spacing="8"
+            alignment="CENTER_LEFT">
+        <TextField fx:id="searchField"
+                   promptText="Search events..."
+                   HBox.hgrow="ALWAYS"
+                   onAction="#handleSearch"/>
+        <Button text="Search"
+                styleClass="search-button"
+                onAction="#handleSearch"/>
+      </HBox>
+
+      <!-- Event Kartları -->
+      <ScrollPane fitToWidth="true"
+                  styleClass="events-scroll"
+                  vbarPolicy="AS_NEEDED"
+                  hbarPolicy="NEVER">
+        <FlowPane fx:id="mainEventContainer"
+                  styleClass="event-flowpane"
+                  hgap="60"
+                  vgap="18"
+                  prefWrapLength="800"
+                  alignment="TOP_LEFT"/>
+      </ScrollPane>
+    </VBox>
+  </center>
+</BorderPane>
