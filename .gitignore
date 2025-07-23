@@ -1,14 +1,22 @@
 # === Firebase ===
-# Firebase servis hesabı anahtarı – kesinlikle Git'e eklenmemeli!
+# Kesinlikle repoya eklenmemeli
 src/main/resources/firebase/serviceAccountKey.json
 
-# === Maven ===
-# Maven derleme çıktısı
+# === Ortam Değişkenleri ===
+# .env veya başka yerel config dosyaları
+.env
+*.env
+
+# === Maven Wrapper ===
+.mvn/
+mvnw
+mvnw.cmd
+
+# === Maven Derleme Çıktısı ===
 target/
 *.class
 
-# === Java IDE Ayarları ===
-# IntelliJ IDEA ve VS Code gibi editörler için
+# === IDE Ayarları ===
 .vscode/
 .idea/
 *.iml
@@ -17,7 +25,8 @@ target/
 .DS_Store
 Thumbs.db
 
-# === Log Dosyaları ve Geçici Çıktılar ===
+# === Log ve Geçici Dosyalar ===
+logs/
 *.log
 *.tmp
 *.swp
@@ -26,7 +35,7 @@ Thumbs.db
 *.pid
 *.hprof
 
-# === Paket Arşivleri (Opsiyonel, eğer jar/war dışa aktarmıyorsan) ===
+# === Paket Arşivleri ===
 *.jar
 *.war
 *.zip
