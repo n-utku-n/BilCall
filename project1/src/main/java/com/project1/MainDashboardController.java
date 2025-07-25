@@ -62,20 +62,22 @@ public class MainDashboardController {
 
 
 
-    @FXML
-    public void initialize() {
-       System.out.println("🔥 initialize() çalıştı!");
-        //uploadDummyEventsToFirestore(); // sadece ilk test için
-        //loadDummyEvents(); // kapalı kalsın
-        loadAppLogo(); 
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> handleSearch(null));
-         Platform.runLater(() -> {
-            Stage stage = (Stage) mainEventContainer.getScene().getWindow();
-            stage.setMaximized(true);
-            // eğer gerçekten tam ekran istersen:
-            // stage.setFullScreen(true);
-        }); 
-    }
+@FXML
+public void initialize() {
+    System.out.println("🔥 initialize() çalıştı!");
+    // 1) Logo önce
+    loadAppLogo();
+
+
+    // 3) Arama alanı dinleyicisi
+    searchField.textProperty().addListener((obs, oldVal, newVal) -> handleSearch(null));
+
+    // 4) Tam ekran ayarı (istiyorsanız)
+    Platform.runLater(() -> {
+        Stage stage = (Stage) mainEventContainer.getScene().getWindow();
+        stage.setMaximized(true);
+    });
+}
     private UserModel loggedInUser;
 
    @FXML
@@ -255,15 +257,9 @@ private void handleSearch(ActionEvent event) {
  
    @FXML
 private void onProfileButtonClicked(ActionEvent event) {
-    // SceneChanger.switchScene(event, "profile.fxml", controller -> {
-    //     if (controller instanceof ProfileController pc) {
-    //         pc.setUser(loggedInUser);
-    //     }
-    // });
-
-        FXMLLoader loader = SceneChanger.switchScene(event, "profile.fxml");
-        ProfileController pc = loader.getController();
-        pc.setUser(loggedInUser);
+    SceneChanger.switchScene(event, "profile.fxml", ctrl -> {
+        ((ProfileController)ctrl).setUser(loggedInUser);
+    });
 }
 
 public void setUser(UserModel user) {
@@ -301,6 +297,8 @@ public void setUser(UserModel user) {
         e.printStackTrace();
     }
 }
+
+
 
 /**
      * TODO: implemented

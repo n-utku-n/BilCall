@@ -112,11 +112,14 @@ private Button backButton;
         return this.clubName;
     }
 
-    /** ProfileController’dan gelen kulüp bilgilerini ayarlar */
-    public void setClubInfo(String clubId, String clubName) {
-        this.clubId = clubId;
-        this.clubName = clubName;
+/** ProfileController’dan gelen kulüp bilgilerini alır */
+public void setClubInfo(String clubId, String clubName) {
+    if (clubId == null || clubId.isEmpty()) {
+        System.err.println("CreateEventController.setClubInfo: clubId is null or empty!");
     }
+    this.clubId = clubId;
+    this.clubName = clubName;
+}
 
     /**
      * Pre-fills the form with an existing event’s data.
@@ -168,10 +171,14 @@ private Button backButton;
         createButton.setText("Save Changes");
     }
 
-    /** Called by previous controller to pass in the current user */
-    public void setUser(UserModel user) {
-        this.loggedInUser = user;
+/** ProfileController’dan gelen kullanıcıyı alır */
+public void setUser(UserModel user) {
+    if (user == null) {
+        System.err.println("CreateEventController.setUser called with null!");
+        return;
     }
+    this.loggedInUser = user;
+}
 
    
 
@@ -199,6 +206,11 @@ private Button backButton;
  */
 @FXML
 private void handleBack(ActionEvent event) {
+    if (loggedInUser == null) {
+        System.err.println("handleBack: loggedInUser is null!");
+        new Alert(Alert.AlertType.ERROR, "Oturum bilgisi eksik. Geri dönüş yapılamıyor.").showAndWait();
+        return;
+    }
     SceneChanger.goBackToDashboard(event, loggedInUser);
 }
 

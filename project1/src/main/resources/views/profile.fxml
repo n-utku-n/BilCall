@@ -55,8 +55,9 @@
                         fx:id="logOutButton"
                         prefWidth="150"
                         styleClass="profile-section-button" />
-                <Button text="Apply for Leadership"
-                        fx:id="applicationButton"
+                        <Button fx:id="applicationButton"
+                        text="Apply for Leadership"
+                        onAction="#handleApplicationButton"
                         prefWidth="250"
                         wrapText="true"
                         styleClass="profile-section-button" />

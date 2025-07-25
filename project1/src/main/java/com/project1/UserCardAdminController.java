@@ -72,11 +72,18 @@ private void handleChangeRole() {
     try {
         if (selected.equals("Student")) {
             // club_manager → student
-            ApiFuture<WriteResult> future = userRef.update("role", "student", "club", FieldValue.delete());
+            ApiFuture<WriteResult> future = userRef.update(
+                    "role", "student",
+                    "club", FieldValue.delete(),
+                    "clubId", FieldValue.delete(),
+                    "clubName", FieldValue.delete()
+            );
             future.get();
+
             roleLabel.setText("Role: student");
             removeUserFromPreviousClub(); // ID üzerinden siler
             currentClub = null;
+
         } else {
             // student → club_manager
             String clubId = clubNameToIdMap.get(selected); // 🔥 kulüp adı → id
@@ -85,8 +92,14 @@ private void handleChangeRole() {
                 return;
             }
 
-            ApiFuture<WriteResult> future = userRef.update("role", "club_manager", "club", clubId);
+            ApiFuture<WriteResult> future = userRef.update(
+                    "role", "club_manager",
+                    "club", clubId,
+                    "clubId", clubId,
+                    "clubName", selected
+            );
             future.get();
+
             roleLabel.setText("Role: club_manager (" + selected + ")");
             addUserToSelectedClub(clubId);
             removeUserFromPreviousClub(); // önceki kulüpten sil
@@ -99,16 +112,24 @@ private void handleChangeRole() {
 }
 
 
-    private void removeUserFromPreviousClub() {
-        if (currentClub == null || currentClub.isEmpty()) return;
-        DocumentReference clubRef = db.collection("clubs").document(currentClub);
-        clubRef.update("managers", FieldValue.arrayRemove(userId));
-    }
 
-    private void addUserToSelectedClub(String clubId) {
-        DocumentReference clubRef = db.collection("clubs").document(clubId);
-        clubRef.update("managers", FieldValue.arrayUnion(userId));
+private void removeUserFromPreviousClub() {
+    if (currentClub == null || currentClub.isEmpty()) return;
+    DocumentReference clubRef = db.collection("clubs").document(currentClub);
+    try {
+        clubRef.update("managers", FieldValue.arrayRemove(userId)).get();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+private void addUserToSelectedClub(String clubId) {
+    DocumentReference clubRef = db.collection("clubs").document(clubId);
+    try {
+        clubRef.update("managers", FieldValue.arrayUnion(userId)).get();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
     public Button getDeleteButton() {
         return deleteButton;

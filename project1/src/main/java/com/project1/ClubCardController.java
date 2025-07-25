@@ -83,6 +83,7 @@ public class ClubCardController {
             }
         });
     }
+
     /**
      * Populates the card UI with the given club data.
      *
@@ -98,7 +99,13 @@ public class ClubCardController {
         Object activeObj = data.get("activeEventCount");
         int activeCount = activeObj instanceof Number ? ((Number) activeObj).intValue() : 0;
         eventCountLabel.setText("Active Events: " + activeCount);
-        participantCountLabel.setText("Participants: 0"); // Gelecekte güncellenecek
+        // Set followers count from participants array
+        Object followersObj = data.get("participants");
+        int followerCount = 0;
+        if (followersObj instanceof List<?>) {
+            followerCount = ((List<?>) followersObj).size();
+        }
+        participantCountLabel.setText("Followers: " + followerCount);
         // Fetch manager name by UID list
         Object mgrObj = data.get("managers");
         if (mgrObj instanceof List<?>) {
@@ -134,10 +141,11 @@ public class ClubCardController {
                 clubLogo.setImage(null);
             }
         } catch (Exception e) {
-            System.out.println("⚠️ Invalid logo URL for club: " + clubName);
+            System.out.println("⚠ Invalid logo URL for club: " + clubName);
             clubLogo.setImage(null);
         }
     }
+
 
     /**
      * Stores the previous event ID so ClubProfile can return here.
