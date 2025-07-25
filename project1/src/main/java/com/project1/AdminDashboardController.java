@@ -108,10 +108,18 @@ public class AdminDashboardController {
     }
 
     @FXML
-    public void openAdminProfile(MouseEvent event) {
-        System.out.println("Profil butonuna tıklandı (openAdminProfile)");
-        // Buraya admin profiline geçiş için sahne değiştirme kodu eklenebilir.
+private void onOpenLeadershipRequests(ActionEvent event) {
+    try {
+        SceneChanger.switchScene(event, "admin_leadership_requests.fxml");
+    } catch (Exception e) {
+        e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText("Cannot open Leadership Requests.");
+        alert.showAndWait();
     }
+}
 
     /**
      * Loads and filters user data from Firestore, then displays it.
@@ -119,7 +127,7 @@ public class AdminDashboardController {
      * @param keyword     Keyword to search for in user names or emails.
      * @param roleFilter  Selected role to filter users by (All, student, club_manager).
      */
-    private void loadUsers(String keyword, String roleFilter) {
+    public void loadUsers(String keyword, String roleFilter) {
     userListBox.getChildren().clear();
     Firestore db = FirestoreClient.getFirestore();
 

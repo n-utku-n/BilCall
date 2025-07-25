@@ -34,18 +34,29 @@
 
         <Region HBox.hgrow="ALWAYS"/>
 
-        <VBox alignment="CENTER" spacing="5" onMouseClicked="#openAdminProfile">
-            <ImageView fx:id="profileImage" fitWidth="50" fitHeight="50" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../assets/profile.png"/>
-                </image>
-                <clip>
-                    <Circle radius="25" centerX="25" centerY="25"/>
-                </clip>
-            </ImageView>
-            <Text fx:id="userRoleLabel" text="Admin"/>
-        </VBox>
-    </HBox>
+        <Button fx:id="adminButton"
+                styleClass="icon-button"
+                onAction="#onOpenLeadershipRequests"
+                AnchorPane.topAnchor="0"
+                AnchorPane.rightAnchor="0">
+            <graphic>
+                <VBox alignment="CENTER" spacing="5">
+                    <ImageView fx:id="profileImage"
+                               fitWidth="50" fitHeight="50"
+                               pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../assets/profile.png"/>
+                        </image>
+                        <clip>
+                            <Circle radius="25" centerX="25" centerY="25"/>
+                        </clip>
+                    </ImageView>
+                    <Text fx:id="userRoleLabel" text="Admin"/>
+                </VBox>
+            </graphic>
+        </Button>
+
+    </HBox> <!-- 💥 EKLENEN KAPANIŞ SATIRI -->
 
     <!-- SEARCH & FILTER BAR -->
     <HBox fx:id="searchBar" spacing="10" alignment="CENTER_LEFT"

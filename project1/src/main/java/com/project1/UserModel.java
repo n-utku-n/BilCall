@@ -22,7 +22,8 @@ public class UserModel {
     private String role;
     private String clubId;
     private String clubName;
-     private String uid;
+    private String uid;
+    private static UserModel currentUser;
 
     /**
      * No-argument constructor required by Firestore.
@@ -75,6 +76,9 @@ public class UserModel {
     public String getRole() {
         return role;
     }
+        public static UserModel getCurrentUser() {
+        return currentUser;
+    }
 
     // Setters (Firestore için gerekli olabilir)
 
@@ -115,5 +119,8 @@ public class UserModel {
     }
     public void setClubName(String clubName) {
         this.clubName = clubName;
+    }
+        public static void setCurrentUser(UserModel user) {
+        currentUser = user;
     }
 }

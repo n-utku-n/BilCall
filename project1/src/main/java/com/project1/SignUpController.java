@@ -70,26 +70,34 @@ public class SignUpController {
             return;
         }
 
-        try {
-            // Firebase Authentication
+         try {
+            // 1) Firebase Auth ile kullanıcı oluştur
             CreateRequest request = new CreateRequest()
-                    .setEmail(email)
-                    .setPassword(password)
-                    .setDisplayName(name + " " + surname);
-
+                .setEmail(email)
+                .setPassword(password)
+                .setDisplayName(name + " " + surname);
             UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
-            System.out.println("✅ Kullanıcı başarıyla oluşturuldu: " + userRecord.getUid());
-            errorLabel.setText("");
+            String uid = userRecord.getUid();
+            System.out.println("✅ Kullanıcı oluşturuldu: " + uid);
 
-            // Firestore
+            // 2) Firestore için UserModel oluştur ve tüm alanları set et
+            UserModel user = new UserModel(name, surname, studentId, email, role);
+            user.setUid(uid);
+            // Eğer rolü ileride "club_manager" ise:
+            // user.setClubId(selectedClubId);
+            // user.setClubName(selectedClubName);
+
             Firestore db = FirestoreClient.getFirestore();
-            DocumentReference docRef = db.collection("users").document(userRecord.getUid());
-
-            UserModel user = new UserModel(name, surname, studentId, email,role);
+            DocumentReference docRef = db.collection("users").document(uid);
             docRef.set(user);
             System.out.println("✅ Firestore'a kullanıcı kaydedildi.");
-            
-            SceneChanger.switchScene(event, "main_dashboard.fxml");
+
+            // 3) Dashboard'a geçiş: MainDashboardController.setLoggedInUser(user) çağrılacak
+            SceneChanger.switchScene(event, "main_dashboard.fxml", controller -> {
+                if (controller instanceof MainDashboardController mainCtrl) {
+                    mainCtrl.setLoggedInUser(user);
+                }
+            });
 
         } catch (Exception e) {
             System.out.println("❌ Kayıt başarısız: " + e.getMessage());
