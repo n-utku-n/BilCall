@@ -61,7 +61,7 @@ OR, the safest way:
 All contributions are welcome! Please open an issue before submitting a pull request.
 
 ------------------------------------------------------------
-🛡 Security
+ Security
 
 GitHub Secret Scanning is enabled for this repository. Commits containing sensitive information will be automatically flagged.
 
