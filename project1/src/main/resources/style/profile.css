@@ -206,7 +206,6 @@ Button.profile-section-button.club-manager-only:pressed {
     -fx-background-color: #0b5345;
 }
 
-/* Club Card Container styling */
 .club-card-container {
     -fx-background-color: white;
     -fx-border-radius: 16;

@@ -1,4 +1,3 @@
-/* Menü Bar */
 .menu-bar {
   -fx-background-color: white;
   -fx-border-color: #e5e7eb;
@@ -6,7 +5,6 @@
   -fx-padding: 0 28;
 }
 
-/* Menü Öğeleri */
 .menu-item {
   -fx-font-size: 15px;
   -fx-text-fill: #22223b;
@@ -19,7 +17,6 @@
   -fx-text-fill: #3B5BA5;
 }
 
-/* Profil Butonu - Modern Chip */
 .profile-button {
   -fx-background-color: #3B82F6;
   -fx-text-fill: #fff;
@@ -39,7 +36,6 @@
   -fx-scale-y: 1.05;
 }
 
-/* Logo */
 .app-logo {
   -fx-padding: 0 20 0 10;
 }
@@ -49,13 +45,11 @@
   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.17), 4, 0, 0, 1);
 }
 
-/* Ortadaki İçerik */
 .center-content {
   -fx-background-color: transparent;
   -fx-padding: 32;
 }
 
-/* Başlıklar */
 .welcome-label {
   -fx-font-size: 22px;
   -fx-font-weight: bold;
@@ -68,7 +62,6 @@
   -fx-padding: 12 0 0 0;
 }
 
-/* Search Bar */
 .search-bar {
   -fx-padding: 0 0 18 0;
 }
@@ -102,12 +95,10 @@
   -fx-scale-y: 1.06;
 }
 
-/* Arkaplan */
 .root {
   -fx-background-color: #f8fafc;
 }
 
-/* Event Kart Container */
 .event-flowpane {
   -fx-background-color: #fff;
   -fx-padding: 40;
@@ -119,7 +110,6 @@
   -fx-background-radius: 10;
 }
 
-/* ScrollPane’i tamamen şeffaf yap */
 .events-scroll, .events-scroll .viewport, .events-scroll .content {
   -fx-background-color: transparent;
   -fx-border-color: transparent;

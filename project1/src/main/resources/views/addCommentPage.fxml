@@ -18,7 +18,7 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
     <children>
-        <!-- Top bar: Back button -->
+        
         <HBox spacing="10" alignment="CENTER_LEFT">
             <children>
                 <Button fx:id="backButton" id="backButton" text="← Back" onAction="#handleBack" />
@@ -27,25 +27,21 @@
 
         <Label fx:id="eventNameLabel" id="eventNameLabel" text="Event Name" styleClass="title-label" />
 
-        <!-- User info label (name, role, ID) -->
         <Label fx:id="userInfoLabel"
                styleClass="user-info-label"
                text="User Name – Role – ID" />
 
-        <!-- Star rating placeholder -->
         <HBox fx:id="starsBox"
               id="starsBox"
               spacing="5"
               alignment="CENTER_LEFT" />
 
-        <!-- Comment text area -->
         <TextArea fx:id="commentTextArea"
                   id="commentTextArea"
                   promptText="Write your comment..."
                   prefRowCount="5"
                   wrapText="true" />
 
-        <!-- Submit button -->
         <Button fx:id="submitButton"
                 id="submitButton"
                 text="Add Comment"

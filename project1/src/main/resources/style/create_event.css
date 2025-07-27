@@ -1,11 +1,9 @@
-/* Root styling with macOS-like background */
 .root {
     -fx-background-color: #f5f5f7;
     -fx-font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     -fx-font-size: 13px;
 }
 
-/* BorderPane styling */
 .border-pane {
     -fx-background-color: #ffffff;
     -fx-background-radius: 12;
@@ -15,7 +13,6 @@
     -fx-border-radius: 12;
 }
 
-/* ToolBar styling (top section) */
 .tool-bar {
     -fx-background-color: linear-gradient(to bottom, #fafafa, #f0f0f0);
     -fx-border-color: transparent transparent #e0e0e0 transparent;
@@ -25,7 +22,6 @@
     -fx-background-radius: 12 12 0 0;
 }
 
-/* Header label styling */
 .header-label {
     -fx-font-size: 17px;
     -fx-font-weight: 600;
@@ -33,7 +29,6 @@
     -fx-padding: 0 0 0 10;
 }
 
-/* Button styling - macOS style */
 .button {
     -fx-background-color: #ffffff;
     -fx-border-color: #c7c7cc;
@@ -59,7 +54,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 1, 0, 0, 0.5);
 }
 
-/* Primary button (Create button) */
 .button:default {
     -fx-background-color: linear-gradient(to bottom, #007aff, #0056d6);
     -fx-border-color: #0056d6;
@@ -77,7 +71,6 @@
     -fx-border-color: #002975;
 }
 
-/* Back button specific styling */
 .tool-bar .button {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -92,7 +85,6 @@
     -fx-background-radius: 4;
 }
 
-/* ScrollPane styling */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -106,25 +98,21 @@
     -fx-background-color: transparent;
 }
 
-/* Main content VBox */
 .vbox {
     -fx-background-color: #ffffff;
 }
 
-/* HBox styling for form rows */
 .hbox {
     -fx-alignment: center-left;
     -fx-padding: 5 0;
 }
 
-/* Label styling */
 .label {
     -fx-text-fill: #1d1d1f;
     -fx-font-size: 13px;
     -fx-font-weight: 500;
 }
 
-/* TextField styling */
 .text-field {
     -fx-background-color: #ffffff;
     -fx-border-color: #d1d1d6;
@@ -144,7 +132,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0,122,255,0.3), 4, 0, 0, 0);
 }
 
-/* TextArea styling */
 .text-area {
     -fx-background-color: #ffffff;
     -fx-border-color: #d1d1d6;
@@ -167,7 +154,6 @@
     -fx-background-color: transparent;
 }
 
-/* ChoiceBox styling */
 .choice-box {
     -fx-background-color: #ffffff;
     -fx-border-color: #d1d1d6;
@@ -193,7 +179,6 @@
     -fx-background-color: #1d1d1f;
 }
 
-/* DatePicker styling */
 .date-picker {
     -fx-background-color: #ffffff;
     -fx-border-color: #d1d1d6;
@@ -221,7 +206,6 @@
     -fx-scale-y: 0.8;
 }
 
-/* Spinner styling */
 .spinner {
     -fx-background-color: #ffffff;
     -fx-border-color: #d1d1d6;
@@ -261,7 +245,6 @@
     -fx-scale-y: 0.7;
 }
 
-/* Bottom HBox styling */
 .border-pane .hbox:last-child {
     -fx-background-color: linear-gradient(to bottom, #fafafa, #f0f0f0);
     -fx-border-color: #e0e0e0 transparent transparent transparent;
@@ -270,7 +253,6 @@
     -fx-background-radius: 0 0 12 12;
 }
 
-/* Poster path label styling */
 #posterPathLabel {
     -fx-text-fill: #8e8e93;
     -fx-font-style: italic;
@@ -278,13 +260,11 @@
     -fx-padding: 0 10;
 }
 
-/* Custom styling for sections */
 .form-section {
     -fx-spacing: 8;
     -fx-padding: 0 0 15 0;
 }
 
-/* Focus ring for accessibility */
 .text-field:focused,
 .text-area:focused,
 .choice-box:focused,
@@ -293,7 +273,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0,122,255,0.4), 6, 0, 0, 0);
 }
 
-/* Disabled state styling */
 .text-field:disabled,
 .text-area:disabled,
 .choice-box:disabled,
@@ -311,7 +290,6 @@
     -fx-opacity: 0.6;
 }
 
-/* Smooth transitions */
 .button,
 .text-field,
 .text-area,
@@ -321,7 +299,6 @@
     -fx-transition: all 0.2s ease;
 }
 
-/* Bottom Cancel + Create pill buttons */
 .border-pane .hbox:last-child .button {
     -fx-background-color: #007aff;
     -fx-border-color: transparent;
