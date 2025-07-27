@@ -406,7 +406,7 @@ private void onCardClicked(MouseEvent event) {
     String posterUrl = (String) data.get("posterUrl");
     if (posterUrl != null && !posterUrl.isEmpty()) {
         try {
-            System.out.println("🔍 Loading event image: " + posterUrl);
+            System.out.println(" Loading event image: " + posterUrl);
             eventImage.setImage(new Image(posterUrl, true));
         } catch (Exception e) {
             System.out.println("Error loading event image: " + e.getMessage());
@@ -415,12 +415,12 @@ private void onCardClicked(MouseEvent event) {
 
  
     String logoUrl = (String) data.get("logoUrl");
-    System.out.println("🔍 logoUrl from data: " + logoUrl);
+    System.out.println(" logoUrl from data: " + logoUrl);
 
     
     if ((logoUrl == null || logoUrl.isEmpty()) && data.containsKey("clubId")) {
         String clubId = (String) data.get("clubId");
-        System.out.println("🔍 Fallback fetching logo for clubId: " + clubId);
+        System.out.println(" Fallback fetching logo for clubId: " + clubId);
         try {
             DocumentSnapshot clubDoc = FirestoreClient.getFirestore()
                 .collection("clubs")
@@ -429,7 +429,7 @@ private void onCardClicked(MouseEvent event) {
                 .get();
             if (clubDoc.exists()) {
                 logoUrl = clubDoc.getString("logoUrl");
-                System.out.println("🔍 logoUrl from Firestore: " + logoUrl);
+                System.out.println(" logoUrl from Firestore: " + logoUrl);
             }
         } catch (Exception e) {
             System.out.println("Error fetching logoUrl from Firestore: " + e.getMessage());
@@ -439,7 +439,7 @@ private void onCardClicked(MouseEvent event) {
     
     if (logoUrl != null && !logoUrl.isEmpty()) {
         try {
-            System.out.println("🔍 Setting clubLogo image: " + logoUrl);
+            System.out.println("Setting clubLogo image: " + logoUrl);
             clubLogo.setImage(new Image(logoUrl, true));
         } catch (Exception e) {
             System.out.println("Error loading club logo image: " + e.getMessage());
