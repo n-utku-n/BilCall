@@ -11,7 +11,6 @@
             fx:controller="com.project1.MainDashboardController"
             stylesheets="@../style/main_dashboard.css">
 
-  <!-- Üst Menü Bar -->
   <top>
     <HBox fx:id="menuBar"
           styleClass="menu-bar"
@@ -22,7 +21,6 @@
         <Insets top="10" right="28" bottom="10" left="28"/>
       </padding>
 
-      <!-- Uygulama Logosu -->
       <ImageView fx:id="appLogo"
            styleClass="app-logo"
            pickOnBounds="true"
@@ -31,7 +29,6 @@
 
       <Region prefWidth="16"/>
 
-      <!-- Bilkent Logo Daire -->
      <StackPane>
   <ImageView fx:id="bilkentLogo"
              styleClass="logo-image"
@@ -46,13 +43,13 @@
 
       <Pane HBox.hgrow="ALWAYS"/>
 
-      <!-- Menü Öğeleri -->
+
      <ComboBox fx:id="sortComboBox"
           promptText="Sort Events"
           onAction="#handleSortSelection"
           styleClass="sort-combobox"/>
 
-      <!-- Profil Butonu (Dikkat: Sadece profile-button class!) -->
+
       <Button fx:id="profileButton"
               text="Profile"
               onAction="#onProfileButtonClicked"
@@ -60,7 +57,7 @@
     </HBox>
   </top>
 
-  <!-- Ortadaki İçerik -->
+
   <center>
     <VBox styleClass="center-content"
           spacing="18">
@@ -73,7 +70,7 @@
       <Label text="Explore Events"
              styleClass="section-label"/>
 
-      <!-- Search Bar -->
+
       <HBox styleClass="search-bar"
             spacing="8"
             alignment="CENTER_LEFT">
@@ -86,7 +83,7 @@
                 onAction="#handleSearch"/>
       </HBox>
 
-      <!-- Event Kartları -->
+
       <ScrollPane fitToWidth="true"
                   styleClass="events-scroll"
                   vbarPolicy="AS_NEEDED"

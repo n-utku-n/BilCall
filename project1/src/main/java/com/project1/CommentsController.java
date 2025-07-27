@@ -53,13 +53,15 @@ public class CommentsController {
 
     @FXML
     private void initialize() {
-        // CommentsController kendisini sahnenin köküne bağlar
         try {
             backButton.getScene().getRoot().setUserData(this);
-        } catch (Exception ignored) { /* Sahne henüz yoksa hata verme */ }
+        } 
+        catch (Exception ignored) 
+        { 
+            ignored.printStackTrace();
+        }
     }
 
-    /** Event bilgilerini ayarlar ve yorumları yükler */
     public void setEventContext(String eventId, String eventName) {
         this.eventId = eventId;
         this.eventName = eventName;
@@ -67,16 +69,14 @@ public class CommentsController {
         loadCommentsAsync();
     }
 
-    /** Login aşamasında mutlaka çağırılmalı */
     public void setCurrentUser(UserModel user) {
-        System.out.println("CommentsController setCurrentUser: " + user);
+        System.out.println("CurrentUser: " + user);
         this.currentUser = user;
         if (user == null) {
-            System.err.println("[CommentsController] setCurrentUser called with null user, ignoring.");
             return;
         }
         
-        System.out.println("AddCommentController setCurrentUser: " + user);
+        System.out.println("CurrentUser: " + user);
         String displayName = user.getName()
                              + (user.getSurname().isEmpty() ? "" : " " + user.getSurname());
         this.currentUserDisplayName = displayName;
@@ -86,7 +86,7 @@ public class CommentsController {
    @FXML
     private void handleBack(ActionEvent e) {
         if (currentUser == null) {
-            System.err.println("⚠️ Yorum ekleyemezsin, kullanıcı null!");
+            System.err.println("comment cannot be added");
             return;
         }
         FXMLLoader loader = SceneChanger.switchScene(e, "event_detail.fxml");
@@ -103,7 +103,6 @@ public class CommentsController {
             Parent root = loader.load();
             AddCommentController acc = loader.getController();
 
-            // Her zaman güncel user model aktar
             UserModel userModel = (currentUser != null) ? currentUser :
                 new UserModel(currentUserDisplayName, "", 
                     (currentUserId != null && !currentUserId.isBlank() ? currentUserId : ""),
@@ -113,7 +112,7 @@ public class CommentsController {
             acc.setEventContext(eventId, eventName);
 
             Stage stage = (Stage) addCommentButton.getScene().getWindow();
-            root.setUserData(this); // AddCommentPage köküne CommentsController referansını ekle
+            root.setUserData(this); 
             stage.getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -187,7 +186,6 @@ public class CommentsController {
                 commentsContainer.getChildren().add(buildCommentCard(cr))
             );
         }
-        // YORUM ENGELİNİ studentNo'ya göre yap!
         boolean has = comments.stream().anyMatch(c ->
             c.studentNo != null &&
             currentUserId != null &&
