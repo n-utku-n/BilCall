@@ -62,15 +62,15 @@ public class EventDetailController {
     private String eventId;
     private String clubId;
 
-    // Kullanıcı bilgileri (sadece setLoggedInUser ile güncellenmeli)
+    
     private UserModel loggedInUser;
     private String currentUserName = "Anon";
     private String currentUserId = "";
 
-    // Her sahnede controller yüklenince mutlaka çağrılmalı!
+    
     public void setLoggedInUser(UserModel user) {
         if (user == null) {
-            System.err.println("⚠️ setLoggedInUser: user is null!");
+            System.err.println("setLoggedInUser: user is null!");
             return;
         }
         this.loggedInUser = user;
@@ -79,19 +79,17 @@ public class EventDetailController {
         this.currentUserId = user.getStudentId();
     }
 
-    /**
- * Event datayı UI'ya yansıt (önce mutlaka setLoggedInUser çağrılmış olmalı!)
- */
+
 public void setEventData(String eventId, Map<String, Object> data) {
     this.eventId = eventId;
     this.eventData = data;
 
-    // — Başlık ve metinler —
+    
     eventNameLabel.setText(getString(data, "name", "Unnamed Event"));
     descriptionLabel.setText(getString(data, "description", ""));
     rulesLabel.setText(getString(data, "rules", ""));
 
-    // — Kulüp kartı —
+    
     clubCardPlaceholder.getChildren().clear();
     String clubId = getString(data, "clubId", null);
     if (clubId != null && !clubId.isEmpty()) {
@@ -119,7 +117,7 @@ public void setEventData(String eventId, Map<String, Object> data) {
         showClubError("No clubId provided.");
     }
 
-    // — Katılımcı bilgisi ve progress bar —
+   
     List<String> participantsList = (List<String>) data.get("participants");
     if (participantsList == null) {
         participantsList = new ArrayList<>();
@@ -143,7 +141,7 @@ public void setEventData(String eventId, Map<String, Object> data) {
     minParticipantLine.setTranslateX(participantBar.getWidth() * ratio);
     participantBar.widthProperty().addListener(widthListener);
 
-    // — Join/Quit/Comments butonları —
+   
     boolean hasJoined = participantsList.stream()
         .filter(Objects::nonNull)
         .map(String::valueOf)
@@ -176,7 +174,7 @@ public void setEventData(String eventId, Map<String, Object> data) {
         commentsButton.setManaged(false);
     }
 
-    // — Edit/Delete butonları görünürlüğü (admin her zaman, manager gelecekteki event için) —
+    
     boolean isAdmin = loggedInUser != null
         && "admin".equalsIgnoreCase(loggedInUser.getRole());
     boolean isManager = loggedInUser != null
@@ -195,13 +193,13 @@ public void setEventData(String eventId, Map<String, Object> data) {
     deleteDetailButton.setVisible(allowEditDelete);
     deleteDetailButton.setManaged(allowEditDelete);
 
-    // — Poster yükleme —
+    
     String posterUrl = getString(data, "posterUrl", null);
     if (posterUrl != null && !posterUrl.isEmpty()) {
         try {
             eventImage.setImage(new Image(posterUrl, true));
         } catch (Exception e) {
-            System.err.println("⚠️ Poster yüklenemedi: " + posterUrl);
+            System.err.println(" Not upload poster " + posterUrl);
         }
     }
 }
@@ -224,29 +222,28 @@ public void setEventData(String eventId, Map<String, Object> data) {
 
 @FXML
 private void handleBack(ActionEvent event) {
-    // Hangi fxml’e gideceğimizi belirle
+    
     String role = loggedInUser.getRole();
     String targetFxml = "main_dashboard.fxml";
     if ("admin".equals(role)) {
         targetFxml = "admin_dashboard.fxml";
     }
 
-    // Scene’i değiştir ve controller’ı al
+    
     FXMLLoader loader = SceneChanger.switchScene(event, targetFxml);
     if (loader != null) {
         if ("admin".equals(role)) {
-            // Adminse AdminDashboardController kullan
+            
             AdminDashboardController adminCtrl = loader.getController();
             adminCtrl.setLoggedInUser(loggedInUser);
         } else {
-            // Manager veya student ise MainDashboardController kullan
             MainDashboardController mainCtrl = loader.getController();
             mainCtrl.setLoggedInUser(loggedInUser);
         }
     }
 }
 
-    /** Katıl butonuna tıklanınca */
+    
     @FXML
     private void onJoinClicked(ActionEvent event) {
         if (eventId == null || eventId.trim().isEmpty() || loggedInUser == null) return;
@@ -255,14 +252,14 @@ private void handleBack(ActionEvent event) {
                     .collection("events").document(eventId).get().get();
             List<String> participantsList = (List<String>) snap.get("participants");
             if (participantsList != null && participantsList.contains(currentUserId)) {
-                // Already joined, just show comments
+                
                 onCommentsClicked(event);
                 return;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Firestore'da katılımcıyı +1 artır ve kullanıcıyı listeye ekle
+        
         try {
             Firestore db = FirestoreClient.getFirestore();
             db.collection("events")
@@ -276,7 +273,7 @@ private void handleBack(ActionEvent event) {
             ex.printStackTrace();
         }
 
-        // Comments ekranına geç
+       
         FXMLLoader loader = SceneChanger.switchScene(event, "comments.fxml");
         if (loader != null) {
             CommentsController cc = loader.getController();
@@ -285,7 +282,7 @@ private void handleBack(ActionEvent event) {
         }
     }
 
-    /** Comments butonuna tıklanınca */
+    
     @FXML
     private void onCommentsClicked(ActionEvent event) {
         FXMLLoader loader = SceneChanger.switchScene(event, "comments.fxml");
@@ -300,11 +297,11 @@ private void handleBack(ActionEvent event) {
 @FXML
 private void onEditDetail(ActionEvent evt) {
     try {
-        // 1) Load the CreateEvent form
+       
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/create_event.fxml"));
         Parent root = loader.load();
 
-        // 2) Grab its controller and pass data
+   
         CreateEventController ctl = loader.getController();
         ctl.setUser(loggedInUser);
         ctl.setClubInfo(
@@ -313,7 +310,7 @@ private void onEditDetail(ActionEvent evt) {
         );
         ctl.populateForEdit(eventId, eventData);
 
-        // 3) Swap in the new root
+       
         Stage stage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
         stage.getScene().setRoot(root);
     } catch (IOException e) {
@@ -326,13 +323,13 @@ private void onEditDetail(ActionEvent evt) {
         CompletableFuture.runAsync(() -> {
             try {
                 Firestore db = FirestoreClient.getFirestore();
-                // delete event
+               
                 db.collection("events").document(eventId).delete().get();
-                // decrement club's active event count
+               
                 String clubId = (String)eventData.get("clubId");
                 db.collection("clubs").document(clubId)
                     .update("activeEventCount", FieldValue.increment(-1)).get();
-                // return to main dashboard
+             
                 Platform.runLater(() -> {
                     FXMLLoader loader = SceneChanger.switchScene(evt, "main_dashboard.fxml");
                     MainDashboardController ctrl = (MainDashboardController)loader.getController();
@@ -344,10 +341,7 @@ private void onEditDetail(ActionEvent evt) {
         });
     }
 
-    /**
-     * Called when navigating back from ClubProfile to reload this event.
-     * Yani başka controller'dan dönerken hem UserModel hem de eventId aktar!
-     */
+   
     public void setEventId(String eventId) {
         if (eventId == null || eventId.trim().isEmpty()) {
             System.err.println("Warning: setEventId received empty eventId, skipping reload.");
@@ -365,11 +359,11 @@ private void onEditDetail(ActionEvent evt) {
         }
     }
 
-    // Ayrılma işlemini aynen bırakıyoruz:
+   
     @FXML
     private void onQuitClicked(ActionEvent event) {
         if (eventId == null || eventId.trim().isEmpty() || currentUserId == null || currentUserId.trim().isEmpty()) {
-            System.err.println("Quit işlemi için eventId veya userId eksik.");
+            System.err.println("eventId or userId is missing for the quit operation.");
             return;
         }
 
@@ -381,26 +375,26 @@ private void onEditDetail(ActionEvent evt) {
                 db.runTransaction(transaction -> {
                     DocumentSnapshot snap = transaction.get(eventRef).get();
                     if (!snap.exists()) {
-                        throw new RuntimeException("Event bulunamadı: " + eventId);
+                        throw new RuntimeException("Not found event :  " + eventId);
                     }
 
                     List<String> participants = (List<String>) snap.get("participants");
                     Long currentCount = snap.contains("currentParticipants") ? snap.getLong("currentParticipants") : 0L;
 
                     if (participants == null || !participants.contains(currentUserId)) {
-                        System.out.println("Kullanıcı etkinlikte değil, çıkış işlemi atlandı.");
+                        System.out.println("The user is not active, the logout process was skipped.");
                         return null;
                     }
 
-                    // Find comments by this user
+                   
                     var commentsCol = eventRef.collection("comments");
                     var commentsQuery = commentsCol.whereEqualTo("studentNo", currentUserId).get().get();
 
-                    // Initialize rating sums
+                    
                     double ratingSum = snap.contains("ratingSum") ? snap.getDouble("ratingSum") : 0.0;
                     long ratingCount = snap.contains("ratingCount") ? snap.getLong("ratingCount") : 0;
 
-                    // Remove user's comments and update rating sums
+                   
                     for (var doc : commentsQuery.getDocuments()) {
                         double rating = doc.contains("rating") ? doc.getDouble("rating") : 0.0;
                         ratingSum -= rating;
@@ -424,14 +418,14 @@ private void onEditDetail(ActionEvent evt) {
                 }).get();
 
                 Platform.runLater(() -> {
-                    quitButton.setVisible(false);  // Quit butonunu gizle
-                    setEventId(eventId);           // Event detayları yeniden yüklensin
+                    quitButton.setVisible(false);  
+                    setEventId(eventId);           
                 });
 
             } catch (Exception ex) {
                 ex.printStackTrace();
                 Platform.runLater(() -> {
-                    System.err.println("Etkinlikten ayrılırken hata: " + ex.getMessage());
+                    System.err.println("Error leaving event: " + ex.getMessage());
                 });
             }
         });

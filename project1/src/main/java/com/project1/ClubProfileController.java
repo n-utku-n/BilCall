@@ -64,41 +64,41 @@ import java.io.IOException;
  */
 public class ClubProfileController {
 
-    /** ImageView displaying the club's logo */
+   
     @FXML
     private ImageView clubLogo;
 
-    /** Label for club name */
+   
     @FXML
     private Label clubNameLabel;
 
-    /** Label for foundation date */
+   
     @FXML
     private Label foundationDateLabel;
 
-    /** Label displaying club's description */
+
     @FXML
     private Label descriptionLabel;
 
     @FXML private Label participantCountLabel;
     @FXML private Button followButton;
 
-    /** VBox container for managers of the club */
+    
     @FXML
     private VBox managersContainer;
 
-    /** VBox container for the event cards (optional/legacy) */
+   
     @FXML
     private FlowPane eventCardContainer;
 
-    /** VBox container for club-specific events */
+  
     @FXML
     private FlowPane eventListContainer;
 
-    /** Club document ID from Firestore */
+ 
     private String clubId;
 
-    /** Event ID to return to when clicking Back */
+    
     private String previousEventId;
     
 
@@ -127,34 +127,25 @@ public class ClubProfileController {
         });
     }
 
-    /**
-     * Initializes this view for a given club and event.
-     * @param clubId Firestore ID of the club
-     * @param previousEventId Event ID to return to on back
-     */
+    
     public void setClubContext(String clubId, String previousEventId) {
         this.clubId = clubId;
         this.previousEventId = previousEventId;
         try {
-            loadClubData();    // populate descriptionArea and managersListView
-            loadClubEvents();  // populate event sections
+            loadClubData();   
+            loadClubEvents();  
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * @deprecated Use setClubContext instead.
-     */
+  
     @Deprecated
     public void setClubId(String clubId) {
         setClubContext(clubId, null);
     }
 
-    /**
-     * Loads the club's detailed data from Firestore and populates the UI.
-     * This includes name, description, logo, managers, and (future) events.
-     */
+  
     private void loadClubData() {
         try {
             Firestore db = FirestoreClient.getFirestore();
@@ -163,9 +154,9 @@ public class ClubProfileController {
             if (doc.exists()) {
                 Map<String, Object> data = doc.getData();
 
-                // Set club name and foundation date
+                
                 clubNameLabel.setText((String) data.get("name"));
-                // Parse foundationDate stored as Timestamp and format
+               
                 com.google.cloud.Timestamp foundationTs = doc.getTimestamp("foundationDate");
                 if (foundationTs != null) {
                     LocalDate foundationDate = foundationTs.toDate()
@@ -178,10 +169,10 @@ public class ClubProfileController {
                     foundationDateLabel.setText("Founded: N/A");
                 }
 
-                // Set club description
+                
                 descriptionLabel.setText((String) data.get("description"));
 
-                // Load managers from the club document's managers field
+               
                 @SuppressWarnings("unchecked")
                 List<String> managerIds = (List<String>) doc.get("managers");
                 managersContainer.getChildren().clear();
@@ -206,14 +197,13 @@ public class ClubProfileController {
                     }
                 }
 
-                // Load and display logo
+             
                 String logoUrl = (String) data.get("logoUrl");
                 if (logoUrl != null) {
-                    clubLogo.setImage(new Image(logoUrl, true)); // async load
+                    clubLogo.setImage(new Image(logoUrl, true)); 
                 }
 
-                // Clear old cards (if legacy system used)
-                // Populate follower count and button
+               
                 @SuppressWarnings("unchecked")
                 List<String> followerIds = (List<String>) data.get("participants");
                 int followerCount = followerIds != null ? followerIds.size() : 0;
@@ -233,10 +223,7 @@ public class ClubProfileController {
         }
     }
 
-    /**
-     * Loads all events from Firestore, filters by this club's ID,
-     * and displays each as an event card (via FXML).
-     */
+
     private void loadClubEvents() {
         eventCardContainer.getChildren().clear();
         eventListContainer.getChildren().clear();
@@ -254,7 +241,7 @@ public class ClubProfileController {
                     String eventClubId = doc.getString("clubId");
 
                     if (eventClubId != null && eventClubId.equals(clubId)) {
-                        // Always add to Club Events list
+                     
                         FXMLLoader loaderClub = new FXMLLoader(getClass().getResource("/views/event_card.fxml"));
                         VBox clubCard = loaderClub.load();
                         EventCardController clubCtrl = loaderClub.getController();
@@ -262,7 +249,7 @@ public class ClubProfileController {
                         clubCtrl.setData(doc.getId(), doc.getData());
                         eventListContainer.getChildren().add(clubCard);
 
-                        // Add only upcoming (not yet started) events to Active Events
+                       
                         Timestamp eventTs = doc.getTimestamp("eventDate");
                         if (eventTs != null && eventTs.toDate().after(new Date())) {
                             FXMLLoader loaderActive = new FXMLLoader(getClass().getResource("/views/event_card.fxml"));
@@ -274,7 +261,7 @@ public class ClubProfileController {
                         }
                     }
                 } catch (Exception e) {
-                    // Log and continue with next document
+                    
                     e.printStackTrace();
                 }
             }
@@ -284,12 +271,10 @@ public class ClubProfileController {
         }
     }
 
-    /**
-     * Handles the "Back" button action to return either to Event Detail or Profile.
-     */
+   
 @FXML
 private void handleBack(ActionEvent event) {
-    // 1) Eğer önceki eventId varsa direkt detay sayfasına git
+  
     if (previousEventId != null && !previousEventId.trim().isEmpty()) {
         SceneChanger.switchScene(event, "event_detail.fxml", controller -> {
             if (controller instanceof EventDetailController edc) {
@@ -301,12 +286,12 @@ private void handleBack(ActionEvent event) {
     }
 
     try {
-        // 2) Kullanıcının rolünü Firestore’dan al
+       
         Firestore db = FirestoreClient.getFirestore();
         DocumentSnapshot doc = db.collection("users")
                                  .document(currentUserUid)
                                  .get()
-                                 .get();  // .get() burası InterruptedException, ExecutionException fırlatır
+                                 .get();  
 
         String role = doc.exists() ? doc.getString("role") : null;
         String targetFxml = "admin_dashboard.fxml";
@@ -314,7 +299,7 @@ private void handleBack(ActionEvent event) {
             targetFxml = "profile.fxml";
         }
 
-        // 3) Sahneyi değiştir ve controller’a user aktar
+        
         FXMLLoader loader = SceneChanger.switchScene(event, targetFxml);
         if (loader != null) {
             if ("admin".equalsIgnoreCase(role)) {
@@ -325,7 +310,7 @@ private void handleBack(ActionEvent event) {
         }
     } catch (InterruptedException | ExecutionException e) {
         e.printStackTrace();
-        // Eğer Firestore okuma başarısız olursa login sayfasına dön
+        
         SceneChanger.switchScene(event, "login.fxml");
     }
 }

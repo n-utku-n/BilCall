@@ -47,11 +47,11 @@ public class ClubCardController {
     private String clubId;
     private String clubName;
 
-    /** Event ID to return to when opening club profile */
+   
     private String previousEventId;
     private UserModel currentUser;
 
-    // Store current user's UID for navigation
+    
     private String currentUserUid;
 
     public void setCurrentUser(UserModel user) {
@@ -61,13 +61,11 @@ public class ClubCardController {
         }
     }
 
-    /**
-     * Loads club data by ID and populates the card.
-     */
+    
     public void setClubInfo(String clubId, String clubName) {
         this.clubId = clubId;
         this.clubName = clubName;
-        // Asynchronously fetch club document
+       
         CompletableFuture.runAsync(() -> {
             try {
                 DocumentSnapshot doc = FirestoreClient.getFirestore()
@@ -84,35 +82,27 @@ public class ClubCardController {
         });
     }
 
-    /**
-     * Populates the card UI with the given club data.
-     *
-     * @param id   the document ID of the club
-     * @param data the data map retrieved from Firestore
-     */
+  
     public void setData(String id, Map<String, Object> data) {
         this.clubId = id;
         this.clubName = (String) data.get("name");
 
         clubNameLabel.setText(clubName);
-        // Set active event count from data map
         Object activeObj = data.get("activeEventCount");
         int activeCount = activeObj instanceof Number ? ((Number) activeObj).intValue() : 0;
         eventCountLabel.setText("Active Events: " + activeCount);
-        // Set followers count from participants array
         Object followersObj = data.get("participants");
         int followerCount = 0;
         if (followersObj instanceof List<?>) {
             followerCount = ((List<?>) followersObj).size();
         }
         participantCountLabel.setText("Followers: " + followerCount);
-        // Fetch manager name by UID list
         Object mgrObj = data.get("managers");
         if (mgrObj instanceof List<?>) {
             List<String> mgrList = (List<String>) mgrObj;
             if (!mgrList.isEmpty()) {
                 String mgrId = mgrList.get(0);
-                // asynchronously load user info
+               
                 CompletableFuture.runAsync(() -> {
                     try {
                         DocumentSnapshot userDoc = FirestoreClient.getFirestore()
@@ -141,25 +131,18 @@ public class ClubCardController {
                 clubLogo.setImage(null);
             }
         } catch (Exception e) {
-            System.out.println("⚠ Invalid logo URL for club: " + clubName);
+            System.out.println(" Invalid logo URL for club: " + clubName);
             clubLogo.setImage(null);
         }
     }
 
 
-    /**
-     * Stores the previous event ID so ClubProfile can return here.
-     */
+   
     public void setPreviousEventId(String eventId) {
         this.previousEventId = eventId;
     }
 
-    /**
-     * Handles the "View" button action.
-     * Switches to the club profile scene and passes the selected club's ID.
-     *
-     * @param event the action event from the view button
-     */
+  
     @FXML
     private void handleView(ActionEvent event) {
         SceneChanger.switchScene(event, "club_profile.fxml", controller -> {
