@@ -2,7 +2,7 @@ package com.project1;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-// width listener'ı tutmak için
+
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.firebase.cloud.FirestoreClient;
@@ -66,7 +66,7 @@ private javafx.beans.value.ChangeListener<Number> widthListener;
     private Rectangle minParticipantLine;
     
     @FXML
-    private StackPane participantContainer; // CHANGED: Updated to match new FXML
+    private StackPane participantContainer; 
 
     @FXML 
     private Label currentParticipantsText;
@@ -126,54 +126,43 @@ private void onCardClicked(MouseEvent event) {
     }
 }
 
-    /** Firestore event document ID */
+    
     private String eventId;
 
-    /** Firestore club document ID */
+   
     private String clubId;
 
-    /** Cached event data for later use */
     private Map<String, Object> eventData;
     
 
-    /**
-     * Populates the event card UI with provided event data.
-     * Sets all relevant text fields, progress bar, and loads images.
-     *
-     * @param eventId Firestore document ID of the event
-     * @param data    Map containing event fields like name, participants, image URLs, etc.
-     */
+ 
     public void setData(String eventId, Map<String, Object> data) {
-        System.out.println("👉 Setting data for event card");
-        System.out.println("📌 participantContainer null check: " + (participantContainer == null));
+        System.out.println("Setting data for event card");
+        System.out.println("participantContainer null check: " + (participantContainer == null));
     
-        // Initialize components if they're null (fallback lookup)
+        
         initializeComponents();
         
-        // Validate required components
+
         if (!validateComponents()) {
-            System.out.println("❌ Required components are missing, cannot populate card");
+            System.out.println("Required components are missing, cannot populate card");
             return;
         }
 
         this.eventId = eventId;
         this.eventData = data;
-        // Ensure eventFullLabel is hidden by default before populating
+       
         if (eventFullLabel != null) {
             eventFullLabel.setVisible(false);
             eventFullLabel.setManaged(false);
         }
 
-        // Set event title and organizing club name
+       
         populateEventDetails(data);
-        
-        // Set participant information and progress bar
         populateParticipantInfo(data);
-
-        // Load images
         loadImages(data);
         showAverageRating(data);
-        // Show "Event Full" if participants reached max (done inside populateParticipantInfo)
+        
     }
 
     private void showAverageRating(Map<String, Object> data) {
@@ -181,141 +170,132 @@ private void onCardClicked(MouseEvent event) {
     if (data.get("averageRating") instanceof Number) {
         avg = ((Number) data.get("averageRating")).doubleValue();
     }
-    // Yıldızları oluştur
+   
     StringBuilder stars = new StringBuilder();
     int full = (int) avg;
     for (int i = 0; i < full; i++) stars.append("★");
-    if (avg - full >= 0.5) stars.append("☆"); // Yarım yıldız da olabilir
+    if (avg - full >= 0.5) stars.append("☆"); 
     while (stars.length() < 5) stars.append("☆");
 
     ratingStarsLabel.setText(stars.toString());
     ratingValueLabel.setText(String.format("%.1f", avg));
     
-    // Görünürlüğü ayarla
+   
     if (avg > 0) {
         ratingBox.setVisible(true);
     } else {
         ratingBox.setVisible(false);
     }
 }
-    /**
-     * Initialize components using lookup if FXML injection failed
-     */
+    
     private void initializeComponents() {
 
         if (progressContainer == null) {
             progressContainer = (StackPane) eventCardRoot.lookup("#progressContainer");
-            System.out.println("🔁 lookup progressContainer: " + (progressContainer != null));
+            System.out.println("lookup progressContainer: " + (progressContainer != null));
         }
         if (eventCardRoot == null) {
-            System.out.println("❌ eventCardRoot is null - FXML injection failed");
+            System.out.println("eventCardRoot is null - FXML injection failed");
             return;
         }
 
         if (clubName == null) {
             clubName = (Label) eventCardRoot.lookup("#clubName");
-            System.out.println("🔁 lookup clubName: " + (clubName != null));
+            System.out.println("lookup clubName: " + (clubName != null));
         }
 
         if (eventName == null) {
             eventName = (Label) eventCardRoot.lookup("#eventName");
-            System.out.println("🔁 lookup eventName: " + (eventName != null));
+            System.out.println("lookup eventName: " + (eventName != null));
         }
 
         if (eventDateText == null) {
             eventDateText = (Label) eventCardRoot.lookup("#eventDateText");
-            System.out.println("🔁 lookup eventDateText: " + (eventDateText != null));
+            System.out.println("lookup eventDateText: " + (eventDateText != null));
         }
 
         if (participantBar == null) {
             participantBar = (ProgressBar) eventCardRoot.lookup("#participantBar");
-            System.out.println("🔁 lookup participantBar: " + (participantBar != null));
+            System.out.println("lookup participantBar: " + (participantBar != null));
         }
 
         if (minParticipantLine == null) {
             minParticipantLine = (Rectangle) eventCardRoot.lookup("#minParticipantLine");
-            System.out.println("🔁 lookup minParticipantLine: " + (minParticipantLine != null));
+            System.out.println("lookup minParticipantLine: " + (minParticipantLine != null));
         }
 
         if (participantContainer == null) {
             participantContainer = (StackPane) eventCardRoot.lookup("#participantContainer");
-            System.out.println("🔁 lookup participantContainer: " + (participantContainer != null));
+            System.out.println("lookup participantContainer: " + (participantContainer != null));
         }
 
         if (currentParticipantsText == null) {
             currentParticipantsText = (Label) eventCardRoot.lookup("#currentParticipantsText");
-            System.out.println("🔁 lookup currentParticipantsText: " + (currentParticipantsText != null));
+            System.out.println("lookup currentParticipantsText: " + (currentParticipantsText != null));
         }
 
         if (maxParticipantsText == null) {
             maxParticipantsText = (Label) eventCardRoot.lookup("#maxParticipantsText");
-            System.out.println("🔁 lookup maxParticipantsText: " + (maxParticipantsText != null));
+            System.out.println("lookup maxParticipantsText: " + (maxParticipantsText != null));
         }
 
         if (eventImage == null) {
             eventImage = (ImageView) eventCardRoot.lookup("#eventImage");
-            System.out.println("🔁 lookup eventImage: " + (eventImage != null));
+            System.out.println("lookup eventImage: " + (eventImage != null));
         }
 
         if (clubLogo == null) {
             clubLogo = (ImageView) eventCardRoot.lookup("#clubLogo");
-            System.out.println("🔁 lookup clubLogo: " + (clubLogo != null));
+            System.out.println("lookup clubLogo: " + (clubLogo != null));
         }
 
         if (eventFullLabel == null) {
             eventFullLabel = (Label) eventCardRoot.lookup("#eventFullLabel");
-            System.out.println("🔁 lookup eventFullLabel: " + (eventFullLabel != null));
+            System.out.println("lookup eventFullLabel: " + (eventFullLabel != null));
         }
 
     }
 
-    /**
-     * Validate that all required components are available
-     */
+   
     private boolean validateComponents() {
         boolean allValid = true;
 
         if (eventName == null) {
-            System.out.println("❌ eventName is null");
+            System.out.println("eventName is null");
             allValid = false;
         }
         if (eventDateText == null) {
-            System.out.println("❌ eventDateText is null");
+            System.out.println("eventDateText is null");
             allValid = false;
         }
         if (clubName == null) {
-            System.out.println("❌ clubName is null");
+            System.out.println("clubName is null");
             allValid = false;
         }
         if (participantBar == null) {
-            System.out.println("❌ participantBar is null");
+            System.out.println("participantBar is null");
             allValid = false;
         }
         if (currentParticipantsText == null) {
-            System.out.println("❌ currentParticipantsText is null");
+            System.out.println("currentParticipantsText is null");
             allValid = false;
         }
         if (maxParticipantsText == null) {
-            System.out.println("❌ maxParticipantsText is null");
+            System.out.println("maxParticipantsText is null");
             allValid = false;
         }
 
         return allValid;
     }
 
-    /**
-     * Populate event details (name, club name)
-     */
+   
     private void populateEventDetails(Map<String, Object> data) {
-        // Set event name
         String eventNameStr = (String) data.get("name");
         if (eventNameStr != null) {
             eventName.setText(eventNameStr);
         } else {
             eventName.setText("Unnamed Event");
         }
-
-        // Set club name
         String clubNameStr = (String) data.get("clubName");
         if (clubNameStr != null && !clubNameStr.isEmpty()) {
             clubName.setText(clubNameStr);
@@ -323,7 +303,6 @@ private void onCardClicked(MouseEvent event) {
             clubName.setText("Unknown Club");
         }
 
-        // Set event date
         Timestamp eventDate = (Timestamp) data.get("eventDate");
         if (eventDate != null && eventDateText != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
@@ -334,9 +313,6 @@ private void onCardClicked(MouseEvent event) {
         }
     }
 
-    /**
-     * Populate participant information and progress bar
-     */
     private void populateParticipantInfo(Map<String, Object> data) {
         int current = 0, min = 0, max = 100;
         try {
@@ -349,7 +325,7 @@ private void onCardClicked(MouseEvent event) {
             if ((o = data.get("minParticipants")) != null) min = ((Number)o).intValue();
             if ((o = data.get("maxParticipants")) != null) max = ((Number)o).intValue();
         } catch (Exception e) {
-            System.out.println("⚠️ Error parsing participant numbers: " + e.getMessage());
+            System.out.println("Error parsing participant numbers: " + e.getMessage());
         }
 
         participantBar.setProgress(max > 0 ? (double) current / max : 0);
@@ -391,21 +367,18 @@ private void onCardClicked(MouseEvent event) {
         currentParticipantsText.setText(String.valueOf(current));
         maxParticipantsText.setText(String.valueOf(max));
 
-        // Show "Event Full" label if at capacity
+       
         boolean isFull = current >= max;
         if (eventFullLabel != null) {
             eventFullLabel.setVisible(isFull);
             eventFullLabel.setManaged(isFull);
         }
     }
-    /**
-     * Position the red minimum participant line on the progress bar
-     */
+    
     private void positionMinParticipantLine(int min, int max) {
         if (max > 0 && min <= max && minParticipantLine != null && participantBar != null) {
             Platform.runLater(() -> {
                 try {
-                    // Force layout calculation
                     participantBar.applyCss();
                     participantBar.layout();
 
@@ -418,20 +391,18 @@ private void onCardClicked(MouseEvent event) {
                         minParticipantLine.setOpacity(1);
                     }
                 } catch (Exception e) {
-                    System.out.println("❌ Error positioning min participant line: " + e.getMessage());
+                    System.out.println("Error positioning min participant line: " + e.getMessage());
                 }
             });
         } else {
-            System.out.println("❌ Cannot position min line - invalid parameters or null components");
+            System.out.println("Cannot position min line - invalid parameters or null components");
         }
     }
  
 
-    /**
-     * Load event and club images
-     */
+   
   private void loadImages(Map<String, Object> data) {
-    // ==== 1) Event poster ====
+    
     String posterUrl = (String) data.get("posterUrl");
     if (posterUrl != null && !posterUrl.isEmpty()) {
         try {
@@ -442,12 +413,11 @@ private void onCardClicked(MouseEvent event) {
         }
     }
 
-    // ==== 2) Kulüp logosu ====
-    // 2.a) data içindeki logoUrl
+ 
     String logoUrl = (String) data.get("logoUrl");
     System.out.println("🔍 logoUrl from data: " + logoUrl);
 
-    // 2.b) Eğer data'da yoksa Firestore'dan çek
+    
     if ((logoUrl == null || logoUrl.isEmpty()) && data.containsKey("clubId")) {
         String clubId = (String) data.get("clubId");
         System.out.println("🔍 Fallback fetching logo for clubId: " + clubId);
@@ -466,22 +436,20 @@ private void onCardClicked(MouseEvent event) {
         }
     }
 
-    // 2.c) Gerçekten bir URL varsa yüklüyoruz
+    
     if (logoUrl != null && !logoUrl.isEmpty()) {
         try {
             System.out.println("🔍 Setting clubLogo image: " + logoUrl);
             clubLogo.setImage(new Image(logoUrl, true));
         } catch (Exception e) {
-            System.out.println("⚠️ Error loading club logo image: " + e.getMessage());
+            System.out.println("Error loading club logo image: " + e.getMessage());
         }
     } else {
-        System.out.println("❌ No valid logoUrl found, clubLogo remains empty.");
+        System.out.println("No valid logoUrl found, clubLogo remains empty.");
     }
 } 
 
-    /**
-     * Load club logo from Firestore
-     */
+    
     private void loadClubLogo(String clubId) {
         try {
             DocumentSnapshot clubDoc = FirestoreClient.getFirestore()
@@ -497,16 +465,14 @@ private void onCardClicked(MouseEvent event) {
                 }
             }
         } catch (Exception e) {
-            System.out.println("⚠️ Error loading club logo: " + e.getMessage());
+            System.out.println("Error loading club logo: " + e.getMessage());
         }
     }
 
-    /**
-     * Navigate to event detail page
-     */
+   
  private void navigateToEventDetail() {
     if (currentUser == null) {
-        System.err.println("❌ [EventCardController] Kullanıcı null, event detayına geçilemiyor!");
+        System.err.println("[EventCardController] User is null, cannot proceed to event details!");
         return;
     }
 
@@ -514,14 +480,14 @@ private void onCardClicked(MouseEvent event) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/event_detail.fxml"));
         Parent root = loader.load();
 
-        // EventDetailController'a kullanıcı bilgisini aktar
+       
         EventDetailController controller = loader.getController();
-        controller.setLoggedInUser(currentUser);        // HER ZAMAN USERMODELİ SET ET
+        controller.setLoggedInUser(currentUser);        
         controller.setEventData(eventId, eventData); 
         if (currentUser != null) {
             controller.setLoggedInUser(currentUser);
         } else {
-            System.err.println("❌ currentUser null, EventDetailController'a gönderilemedi!");
+            System.err.println("currentUser null, could not be sent to EventDetailController!");
             return; 
         }
         
@@ -540,12 +506,7 @@ private void onCardClicked(MouseEvent event) {
     }
 }
 
-    /**
-     * Navigates to the detailed event screen when the "Details" button is clicked.
-     * NOTE: This method is kept for compatibility, but the new design uses card click instead
-     *
-     * @param event The ActionEvent triggered by the button click
-     */
+   
     @FXML
     private void handleDetails(ActionEvent event) {
         navigateToEventDetail();
