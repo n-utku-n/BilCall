@@ -35,7 +35,6 @@
         <VBox fx:id="clubCardPlaceholder"/>
     </left>
 
-
     <bottom>
         <HBox alignment="CENTER_RIGHT" spacing="10">
             <Button text=" Back" onAction="#handleBack"/>

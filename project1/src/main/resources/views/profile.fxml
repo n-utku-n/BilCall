@@ -12,7 +12,7 @@
       stylesheets="@../style/profile.css"
       styleClass="profile-root">
 
-    <!-- Back button at top left -->
+   
     <HBox alignment="TOP_LEFT" style="-fx-padding: 20 20 0 20;">
         <Button fx:id="backButton"
                 text="Back"
@@ -20,13 +20,13 @@
                 styleClass="back-button" />
     </HBox>
 
-    <!-- Main content -->
+
     <HBox spacing="20"
           alignment="TOP_CENTER"
           style="-fx-padding: 20;"
           VBox.vgrow="ALWAYS">
 
-        <!-- Left panel: User info & actions -->
+        
         <VBox spacing="25" alignment="CENTER" prefWidth="300" styleClass="profile-left" HBox.hgrow="NEVER">
             <Circle radius="50" styleClass="circle-placeholder" />
 
@@ -72,20 +72,20 @@
             </VBox>
         </VBox>
 
-        <!-- Right panel: Joined events -->
+       
         <VBox spacing="10"
               prefWidth="700"
               styleClass="profile-right"
               HBox.hgrow="ALWAYS"
               alignment="TOP_CENTER">
-            <!-- Club Card Section -->
+         
             <VBox fx:id="clubCardContainer"
                   spacing="10"
                   prefWidth="700"
                   prefHeight="200"
                   styleClass="club-card-container"
                   alignment="TOP_CENTER">
-                <!-- Club card will be injected here -->
+             
             </VBox>
             <Label text="Joined Events"
                    style="-fx-font-size: 18px; -fx-font-weight: bold;"
