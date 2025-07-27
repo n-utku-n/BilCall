@@ -18,6 +18,7 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
     <children>
+        
         <HBox spacing="10" alignment="CENTER_LEFT">
             <children>
                 <Button fx:id="backButton" id="backButton" text="← Back" onAction="#handleBack" />
@@ -25,9 +26,11 @@
         </HBox>
 
         <Label fx:id="eventNameLabel" id="eventNameLabel" text="Event Name" styleClass="title-label" />
+
         <Label fx:id="userInfoLabel"
                styleClass="user-info-label"
                text="User Name – Role – ID" />
+
         <HBox fx:id="starsBox"
               id="starsBox"
               spacing="5"

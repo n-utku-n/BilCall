@@ -19,8 +19,6 @@ public class AddCommentTest {
 
     private static final String EVENT_ID = "0wCZU1aaMHqiifOCmtcW";
 
-    // private static final String SERVICE_ACCOUNT_PATH = "src/main/resources/serviceAccountKey.json";
-
     public static void main(String[] args) throws Exception {
         initFirebase();
 
@@ -36,8 +34,6 @@ public class AddCommentTest {
         }
 
         System.out.println("Sample comments have been added");
-        // Close the app if needed:
-        // FirebaseApp.getInstance().delete();
     }
 
     private static void initFirebase() throws Exception {
