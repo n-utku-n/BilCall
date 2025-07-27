@@ -117,12 +117,12 @@ private javafx.beans.value.ChangeListener<Number> widthListener;
    @FXML
 private void onCardClicked(MouseEvent event) {
    
-    System.out.println("📦 Event card clicked!");
+    System.out.println("Event card clicked!");
     
     if (eventId != null && eventData != null && currentUser != null) {
         navigateToEventDetail();
     } else {
-        System.err.println("❌ EventCardController: Missing data! eventId, eventData or currentUser is null.");
+        System.err.println("EventCardController: Missing data! eventId, eventData or currentUser is null.");
     }
 }
 
@@ -438,7 +438,7 @@ private void onCardClicked(MouseEvent event) {
             System.out.println("🔍 Loading event image: " + posterUrl);
             eventImage.setImage(new Image(posterUrl, true));
         } catch (Exception e) {
-            System.out.println("⚠️ Error loading event image: " + e.getMessage());
+            System.out.println("Error loading event image: " + e.getMessage());
         }
     }
 
@@ -462,7 +462,7 @@ private void onCardClicked(MouseEvent event) {
                 System.out.println("🔍 logoUrl from Firestore: " + logoUrl);
             }
         } catch (Exception e) {
-            System.out.println("⚠️ Error fetching logoUrl from Firestore: " + e.getMessage());
+            System.out.println("Error fetching logoUrl from Firestore: " + e.getMessage());
         }
     }
 
