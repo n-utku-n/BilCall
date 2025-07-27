@@ -27,19 +27,19 @@ public class FirebaseInitializer {
                         .getResourceAsStream("firebase/serviceAccountKey.json")) {
 
             if (serviceAccount == null) {
-                throw new IllegalStateException("serviceAccountKey.json bulunamadı!");
+                throw new IllegalStateException("serviceAccountKey.json can not be found!");
             }
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setStorageBucket("project1-9c22f.firebasestorage.app")  // 🔸 BU SATIRI EKLE
+                    .setStorageBucket("project1-9c22f.firebasestorage.app") 
                     .build();
 
             FirebaseApp.initializeApp(options);
-            System.out.println("✅ Firebase bağlantısı BAŞARILI!");
+            System.out.println(" Firebase connection works");
 
         } catch (Exception e) {
-            System.out.println("❌ Firebase bağlantısı BAŞARISIZ!");
+            System.out.println(" Firebase connection doesnt't works!");
             e.printStackTrace();
         }
     }

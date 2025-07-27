@@ -108,7 +108,7 @@ private void handleSelectLogo(ActionEvent event) {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "❌ Failed to upload logo: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Failed to upload logo: " + e.getMessage());
         }
 
     } else {
@@ -160,12 +160,12 @@ private void handleCreateClub(ActionEvent event) {
         ApiFuture<DocumentReference> result = db.collection("clubs").add(clubData);
         result.get(); // Wait until write completes
 
-        showAlert(Alert.AlertType.INFORMATION, "✅ Club created successfully!");
+        showAlert(Alert.AlertType.INFORMATION, " Club created successfully!");
         SceneChanger.switchScene(event, "admin_dashboard.fxml");
 
     } catch (Exception e) {
         e.printStackTrace();
-        showAlert(Alert.AlertType.ERROR, "❌ Failed to create club: " + e.getMessage());
+        showAlert(Alert.AlertType.ERROR, " Failed to create club: " + e.getMessage());
     }
 }
 

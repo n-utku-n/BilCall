@@ -46,7 +46,7 @@ public class SceneChanger {
             return loader;
 
         } catch (Exception e) {
-            System.out.println("❌ Sahne geçişinde hata: " + e.getMessage());
+            System.out.println(" ERROR " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -74,17 +74,17 @@ public class SceneChanger {
             return loader;
 
         } catch (Exception e) {
-            System.out.println("❌ Sahne geçişinde hata: " + e.getMessage());
+            System.out.println(" ERROR " + e.getMessage());
             e.printStackTrace();
             return null;
         }
     }
 
      /**
-     * Geri butonları için ortak dashboard switcher.
+     * Common dashboard switcher for back buttons.
      * @param event ActionEvent (buton click)
-     * @param user  O anki giriş yapmış kullanıcı
-     * @return FXMLLoader ya da null
+     * @param user  the user that currently logged in
+     * @return FXMLLoader or null
      */
     public static FXMLLoader goBackToDashboard(ActionEvent event, UserModel user) {
         String role = user.getRole().toLowerCase();
@@ -95,7 +95,7 @@ public class SceneChanger {
         FXMLLoader loader = switchScene(event, target);
         if (loader == null) return null;
 
-        // Controller tipine göre kullanıcıyı set et
+        // Setting the user according to the controller type
         Object ctrl = loader.getController();
         if (ctrl instanceof AdminDashboardController adm) {
             adm.setLoggedInUser(user);
