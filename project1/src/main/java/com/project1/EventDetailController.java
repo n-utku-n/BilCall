@@ -19,6 +19,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
@@ -42,8 +44,9 @@ public class EventDetailController {
     @FXML private Label eventNameLabel;
     @FXML private Label participantInfoLabel;
     @FXML private ImageView eventImage;
-    @FXML private Label descriptionLabel;
-    @FXML private Label rulesLabel;
+    // Description is now a TextFlow and Text node for dynamic height
+    @FXML private TextFlow descriptionLabelContainer;
+    @FXML private Text descriptionText;
     @FXML private VBox clubCardPlaceholder;
 
     @FXML private ProgressBar participantBar;
@@ -86,8 +89,7 @@ public void setEventData(String eventId, Map<String, Object> data) {
 
     
     eventNameLabel.setText(getString(data, "name", "Unnamed Event"));
-    descriptionLabel.setText(getString(data, "description", ""));
-    rulesLabel.setText(getString(data, "rules", ""));
+    descriptionText.setText(getString(data, "description", ""));
 
     
     clubCardPlaceholder.getChildren().clear();

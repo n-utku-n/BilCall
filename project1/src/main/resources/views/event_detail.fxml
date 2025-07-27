@@ -11,9 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1"
-           xmlns:fx="http://javafx.com/fxml"
+<StackPane xmlns="http://javafx.com/javafx/21.0.1"
+           xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.project1.EventDetailController"
            stylesheets="@../style/event_detail.css"
            prefWidth="900" prefHeight="600"
@@ -69,22 +71,15 @@
     </VBox>
 
    
-    <VBox spacing="10" styleClass="framed-box" prefWidth="840">
-      <Label fx:id="descriptionLabel"
-             wrapText="true"
-             text="Description goes here"
-             maxWidth="788"
-             style="-fx-padding: 10; -fx-background-color: white;"/>
+    <VBox spacing="10" styleClass="framed-box" prefWidth="840" VBox.vgrow="ALWAYS">
+      <TextFlow fx:id="descriptionLabelContainer" VBox.vgrow="ALWAYS">
+        <Text fx:id="descriptionText"
+              wrappingWidth="808"
+              styleClass="description-label"
+              text="Description goes here"/>
+      </TextFlow>
     </VBox>
 
-    
-    <VBox spacing="10" styleClass="framed-box" prefWidth="840">
-      <Label fx:id="rulesLabel"
-             wrapText="true"
-             text="Rules go here"
-             maxWidth="788"
-             style="-fx-padding: 10; -fx-background-color: white;"/>
-    </VBox>
 
     
     <VBox fx:id="clubCardPlaceholder"

@@ -115,6 +115,10 @@
     -fx-text-fill: #111111;  
 }
 
+.label {
+    -fx-wrap-text: true;
+}
+
 .text-area {
     -fx-text-fill: #111111;  
     -fx-background-color: white; 
@@ -184,4 +188,12 @@
 .quit-button:hover {
     -fx-background-color: #DC2626; 
     -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.7), 8, 0, 0, 3);
+}
+
+.description-label {
+    -fx-wrap-text: true;
+    -fx-font-size: 15px;
+    -fx-line-spacing: 4px;
+    -fx-max-width: Infinity;
+    -fx-max-height: Infinity;
 }
