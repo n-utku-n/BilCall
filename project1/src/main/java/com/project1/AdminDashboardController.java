@@ -69,32 +69,30 @@ public class AdminDashboardController {
 
    @FXML
     private void initialize() {
-    System.out.println("📋 Admin dashboard initialized");
+    System.out.println(" Admin dashboard initialized");
 
-    // ComboBox ayarları
+    // ComboBox 
     filterComboBox.getItems().addAll("All", "student", "club_manager", "pending");
     filterComboBox.setValue("All");
 
-    // Kulüp kartları admin görünümlü yüklensin (butonlarla)
     refreshClubList();
 
-    // Kullanıcı ve etkinlikleri yükle
     loadUsers("", "All");
     loadEvents();
 
-    // Refresh butonu: her şey yeniden yüklensin
+    // Refresh 
     refreshButton.setOnAction(e -> {
-        refreshClubList(); // değiştirildi
+        refreshClubList(); 
         loadUsers(searchField.getText().trim(), filterComboBox.getValue());
         loadEvents();
     });
 
-    // Arama kutusu değişince kullanıcı listesi güncellensin
+
     searchField.textProperty().addListener((observable, oldVal, newVal) -> {
         loadUsers(newVal.trim(), filterComboBox.getValue());
     });
 
-    // ComboBox filtre değeri değişince kullanıcı listesi güncellensin
+
     filterComboBox.valueProperty().addListener((observable, oldVal, newVal) -> {
         loadUsers(searchField.getText().trim(), newVal);
     });
@@ -141,7 +139,7 @@ private void onOpenLeadershipRequests(ActionEvent event) {
 
     try {
         List<QueryDocumentSnapshot> userDocs = future.get().getDocuments();
-        List<DocumentSnapshot> clubDocs = loadClubDocuments(); // 🔁 Kulüp dokümanları
+        List<DocumentSnapshot> clubDocs = loadClubDocuments(); 
 
         for (QueryDocumentSnapshot doc : userDocs) {
             String name = doc.getString("name");
@@ -151,7 +149,7 @@ private void onOpenLeadershipRequests(ActionEvent event) {
             String club = doc.contains("club") ? doc.getString("club") : null;
             String userId = doc.getId();
 
-            // Filtreleme
+            // Filter
             if (!keyword.isEmpty() &&
                 !(name.toLowerCase().contains(keyword.toLowerCase()) ||
                   email.toLowerCase().contains(keyword.toLowerCase()))) {
@@ -162,21 +160,21 @@ private void onOpenLeadershipRequests(ActionEvent event) {
                 continue;
             }
 
-            // FXML kartı yükle
+            // Load FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/user_card_admin.fxml"));
             HBox userCard = loader.load();
 
-            // Controller'ı al
+            // Controller
             UserCardAdminController controller = loader.getController();
 
-            // Kulüp adı (görselde) için isim bul
-            String currentClubName = getClubNameById(clubDocs, club); // id → name
+
+            String currentClubName = getClubNameById(clubDocs, club); 
             String fullName = name + " " + surname;
 
             controller.setUserData(userId, fullName, role, currentClubName);
-            controller.setClubList(clubDocs); // 🔥 Club listesi DocumentSnapshot olarak geçilir
+            controller.setClubList(clubDocs); 
 
-            // Detay ve silme butonlarını bağla
+            // Detail and delete button
             controller.getDeleteButton().setOnAction(e -> deleteUser(userId));
             controller.getDetailsButton().setOnAction(e -> {
             String uid = doc.getId();
@@ -192,7 +190,7 @@ private void onOpenLeadershipRequests(ActionEvent event) {
             );
         });
 
-            // Listeye ekle
+            // Add to List
             userListBox.getChildren().add(userCard);
         }
     } catch (Exception e) {
@@ -221,10 +219,9 @@ private UserModel loggedInUser;
 public void setLoggedInUser(UserModel user) {
     this.loggedInUser = user;
     refreshClubList();
-    loadUsers("", filterComboBox.getValue());  // or "All"
+    loadUsers("", filterComboBox.getValue());
     loadEvents();
-    // Örnek: admin ismini UI’da gösterin
-    // adminLabel.setText("Admin: " + user.getName());
+
 }
 
 /**
@@ -232,32 +229,31 @@ public void setLoggedInUser(UserModel user) {
  * EventDetail.fxml yolu proje kaynaklarınıza (/views/event_detail.fxml) göre ayarlandı.
  */
 private void loadEvents() {
-    // Mevcut kartları temizle
+    // Clear cards
     eventListBox.getChildren().clear();
 
-    // Firestore örneğini al
+    // Firestore sample
     Firestore db = FirestoreClient.getFirestore();
 
-    // "events" koleksiyonundaki tüm belgeleri asenkron olarak çek
+    // pull docs from "events" collection
     ApiFuture<QuerySnapshot> future = db.collection("events").get();
     try {
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (QueryDocumentSnapshot doc : documents) {
-            // event_card.fxml'i yükle
+            // load event_card.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/event_card.fxml"));
             Parent cardRoot = loader.load();
 
-            // Controller'a verileri ilet
+            // Send data 
             EventCardController cardCtrl = loader.getController();
             cardCtrl.setCurrentUser(loggedInUser);
             cardCtrl.setData(doc.getId(), doc.getData());
 
-            // Kart tıklanınca tek FXML'e yönlendir (event_detail.fxml)
             cardRoot.setOnMouseClicked(evt -> {
     ActionEvent ae = new ActionEvent(cardRoot, null);
     SceneChanger.switchScene(
         ae,
-        "event_detail.fxml",          // ← just the file name, no slash or path
+        "event_detail.fxml",          
         controller -> {
             EventDetailController detailCtrl = (EventDetailController) controller;
             detailCtrl.setLoggedInUser(loggedInUser);
@@ -266,12 +262,10 @@ private void loadEvents() {
     );
 });
 
-            // Kartı liste konteynerine ekle
             eventListBox.getChildren().add(cardRoot);
         }
     } catch (InterruptedException | ExecutionException | IOException ex) {
         ex.printStackTrace();
-        // Gerekirse kullanıcıya hata bildirimi ekleyin
     }
 }
 
@@ -283,6 +277,7 @@ private void loadEvents() {
  *
  * @param uid      User document ID
  * @param newRole  The new role to assign (student or club_manager)
+ * @deprecated
  */
 private void updateRole(String uid, String newRole) {
     Firestore db = FirestoreClient.getFirestore();
@@ -294,6 +289,7 @@ private void updateRole(String uid, String newRole) {
  * Deletes a user from Firestore and refreshes the dashboard.
  *
  * @param uid User document ID to delete
+ * @deprecated
  */
 private void deleteUser(String uid) {
     Firestore db = FirestoreClient.getFirestore();
@@ -305,6 +301,7 @@ private void deleteUser(String uid) {
  * Deletes an event from Firestore and refreshes the dashboard.
  *
  * @param eventId Event document ID to delete
+ * @deprecated
  */
 private void deleteEvent(String eventId) {
     Firestore db = FirestoreClient.getFirestore();
@@ -318,6 +315,7 @@ private void deleteEvent(String eventId) {
  * loads a UI card for each club using the 'club_card.fxml' template,
  * sets the data on the card controller, and adds the card to the list box.
  * In case of any errors (e.g., Firestore connection issues), the exception is printed.
+ * @deprecated
  */
 protected void refreshClubList() {
     clubsListBox.getChildren().clear(); // Önce eski kartları sil
@@ -337,14 +335,13 @@ protected void refreshClubList() {
                     AnchorPane clubCard = loader.load();
 
                     ClubCardAdminController controller = loader.getController();
-                    controller.setParentController(this); // setDashboardController yerine
+                    controller.setParentController(this); 
                     controller.setData(doc.getId(), doc.getData());
 
                     newClubCards.add(clubCard);
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    System.out.println("⚠️ Hata: Kulüp kartı yüklenemedi.");
                 }
             }
 
@@ -352,15 +349,15 @@ protected void refreshClubList() {
                 clubsListBox.getChildren().addAll(newClubCards);
 
                 if (documents.isEmpty()) {
-                    System.out.println("ℹ️ Hiç kulüp bulunamadı.");
+                    System.out.println("No Club found.");
                 } else {
-                    System.out.println("✅ Kulüpler başarıyla yüklendi.");
+                    System.out.println("Clubs succesfuly downloaded");
                 }
             });
 
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            System.out.println("⚠️ Firestore'dan veri alınırken hata oluştu.");
+            System.out.println("Error occured while downloading datas from firestore");
         }
     }, Runnable::run);
 }

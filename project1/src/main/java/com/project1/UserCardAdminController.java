@@ -19,11 +19,11 @@ public class UserCardAdminController {
     @FXML private Button deleteButton;
 
     private String userId;
-    private String currentClub; // varsa
+    private String currentClub; 
     private Firestore db;
 
     public void initialize() {
-        db = FirebaseInitializer.getFirestore(); // Senin mevcut Firestore bağlantı sınıfın
+        db = FirebaseInitializer.getFirestore(); 
     }
 
     public void setUserData(String userId, String fullName, String role, String currentClubName) {
@@ -40,20 +40,18 @@ public class UserCardAdminController {
 
     private java.util.Map<String, String> clubNameToIdMap = new java.util.HashMap<>();
 
-    // UserCardAdminController.java
     public void setClubList(List<DocumentSnapshot> clubDocs) {
-        roleComboBox.getItems().clear();          // Eski değerleri temizle
-        roleComboBox.getItems().add("Student");   // Her zaman 'Student' opsiyonu eklensin
+        roleComboBox.getItems().clear();          
+        roleComboBox.getItems().add("Student");   // add always student option
 
         clubNameToIdMap.clear();                  // Eski eşleşmeleri sıfırla
 
-        // 🔽 İşte bu kısım burası:
         for (DocumentSnapshot doc : clubDocs) {
             String id = doc.getId();
-            String name = doc.getString("name"); // Kulüp adı
+            String name = doc.getString("name"); 
             if (name != null) {
-                roleComboBox.getItems().add(name);           // 👈 Kullanıcıya görünen
-                clubNameToIdMap.put(name, id);              // 👈 Arka planda eşleştirilen
+                roleComboBox.getItems().add(name);           
+                clubNameToIdMap.put(name, id);              
             }
         }
 }
@@ -71,7 +69,7 @@ private void handleChangeRole() {
 
     try {
         if (selected.equals("Student")) {
-            // club_manager → student
+            // club_manager to student
             ApiFuture<WriteResult> future = userRef.update(
                     "role", "student",
                     "club", FieldValue.delete(),
@@ -81,12 +79,12 @@ private void handleChangeRole() {
             future.get();
 
             roleLabel.setText("Role: student");
-            removeUserFromPreviousClub(); // ID üzerinden siler
+            removeUserFromPreviousClub(); 
             currentClub = null;
 
         } else {
-            // student → club_manager
-            String clubId = clubNameToIdMap.get(selected); // 🔥 kulüp adı → id
+            // student to club_manager
+            String clubId = clubNameToIdMap.get(selected); 
             if (clubId == null) {
                 showAlert("Selected club not found.");
                 return;
@@ -102,7 +100,7 @@ private void handleChangeRole() {
 
             roleLabel.setText("Role: club_manager (" + selected + ")");
             addUserToSelectedClub(clubId);
-            removeUserFromPreviousClub(); // önceki kulüpten sil
+            removeUserFromPreviousClub(); 
             currentClub = clubId;
         }
     } catch (InterruptedException | ExecutionException e) {

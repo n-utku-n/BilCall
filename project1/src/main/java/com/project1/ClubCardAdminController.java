@@ -16,12 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.application.Platform;
 
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.firebase.cloud.FirestoreClient;
-import javafx.application.Platform;
 import java.util.List;
 
 import java.io.IOException;
@@ -83,10 +78,8 @@ public void setData(String id, Map<String, Object> data) {
 
     clubNameLabel.setText(clubName);
 
-    // → Gerçek sayıları yükle
     updateCounts(data);
 
-    // Logo yükleme (mevcut kodunuz)
     String logoUrl = (String) data.get("logoUrl");
     if (logoUrl != null && !logoUrl.isEmpty()) {
         try {
@@ -143,21 +136,17 @@ private void updateCounts(Map<String, Object> data) {
      */
 @FXML
 private void handleView(ActionEvent event) throws IOException {
-    // 1) Kulüp ID’sini al (senin mevcut yönteminle)
     String selectedClubId = this.clubId; 
 
-    // 2) FXML’i loader ile yükle
     FXMLLoader loader = new FXMLLoader(
         getClass().getResource("/views/club_profile.fxml")
     );
     Parent root = loader.load();
 
-    // 3) Controller’ı al ve parametreleri set et
     ClubProfileController c = loader.getController();
-    c.setClubContext(selectedClubId,null);             // kulüp ID’si
-    c.setCurrentUser(parentController.getLoggedInUser());  // oturumdaki kullanıcı
+    c.setClubContext(selectedClubId,null); 
+    c.setCurrentUser(parentController.getLoggedInUser());
 
-    // 4) Yeni sahneyi göster
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(new Scene(root));
     stage.show();
@@ -181,7 +170,7 @@ private void handleDelete() {
             ApiFuture<WriteResult> future = db.collection("clubs").document(clubId).delete();
 
             try {
-                future.get(); // Wait for deletion
+                future.get(); 
                 System.out.println("✅ Club deleted: " + clubId);
 
                 if (parentController != null) {
@@ -189,7 +178,7 @@ private void handleDelete() {
                 }
 
             } catch (Exception e) {
-                System.err.println("❌ Failed to delete club: " + e.getMessage());
+                System.err.println("Failed to delete club: " + e.getMessage());
                 e.printStackTrace();
             }
         }
