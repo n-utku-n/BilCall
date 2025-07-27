@@ -95,49 +95,34 @@ private Button backButton;
     private String clubName;
 
     private UserModel loggedInUser;
-    // If non-null, indicates we are editing an existing event
     private String editingEventId;
 
-        /**
-     * @return ProfileController’dan gelen kulüp ID’si
-     */
     public String getClubId() {
         return this.clubId;
     }
 
-    /**
-     * @return ProfileController’dan gelen kulüp adı
-     */
     public String getClubName() {
         return this.clubName;
     }
 
-/** ProfileController’dan gelen kulüp bilgilerini alır */
 public void setClubInfo(String clubId, String clubName) {
     if (clubId == null || clubId.isEmpty()) {
-        System.err.println("CreateEventController.setClubInfo: clubId is null or empty!");
+        System.err.println("CreateEventController.setClubInfo: EMPTYY");
     }
     this.clubId = clubId;
     this.clubName = clubName;
 }
 
-    /**
-     * Pre-fills the form with an existing event’s data.
-     * @param eventId  Firestore ID of the event to edit
-     * @param data     Map of its fields
-     */
     public void populateForEdit(String eventId, Map<String, Object> data) {
         this.eventId     = eventId;
         this.eventData   = data;
         this.isEditMode  = true;
 
-        // 1) Text fields
+    
         nameField.setText((String) data.get("name"));
         String type = (String) data.get("eventType");
         typeChoice.setValue(type.substring(0,1).toUpperCase() + type.substring(1));
 
-        // 2) Date + time
-        // Handle Firestore Timestamp or java.util.Date
         Object rawDate = data.get("eventDate");
         java.util.Date d;
         if (rawDate instanceof com.google.cloud.Timestamp ts) {
@@ -145,7 +130,7 @@ public void setClubInfo(String clubId, String clubName) {
         } else if (rawDate instanceof java.util.Date ud) {
             d = ud;
         } else {
-            d = new java.util.Date(); // fallback to now
+            d = new java.util.Date(); 
         }
         java.time.LocalDate ld = d.toInstant()
                                   .atZone(java.time.ZoneId.systemDefault())
@@ -156,25 +141,23 @@ public void setClubInfo(String clubId, String clubName) {
                                   .toLocalTime();
         hourSpinner.getValueFactory().setValue(lt.getHour());
         minuteSpinner.getValueFactory().setValue(lt.getMinute());
-
-        // 3) Location & participants
         locationField.setText((String) data.get("location"));
+
         minPartSpinner.getValueFactory()
             .setValue(((Number)data.get("minParticipants")).intValue());
+
         maxPartSpinner.getValueFactory()
             .setValue(((Number)data.get("maxParticipants")).intValue());
 
-        // 4) Description & poster
         descriptionArea.setText((String) data.get("description"));
         String poster = (String) data.get("posterUrl");
-        posterPathLabel.setText(poster != null ? poster : "(no file)");
+        posterPathLabel.setText(poster != null ? poster : "no poster");
         createButton.setText("Save Changes");
     }
 
-/** ProfileController’dan gelen kullanıcıyı alır */
 public void setUser(UserModel user) {
     if (user == null) {
-        System.err.println("CreateEventController.setUser called with null!");
+        System.err.println("createEventController.setUser is null");
         return;
     }
     this.loggedInUser = user;
@@ -184,31 +167,24 @@ public void setUser(UserModel user) {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Event tipleri
+
         typeChoice.getItems().addAll("Workshop", "Seminar", "Hackathon", "Meeting", "Other");
         typeChoice.getSelectionModel().selectFirst();
 
-        // Saat/Dakika spinners
         hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
         minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
 
-        // Katılımcı sayısı spinners
         minPartSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 20));
         maxPartSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 100));
 
-        posterPathLabel.setText("(no file)");
+        posterPathLabel.setText("no file");
     }
 
-/**
- * Back butonuna basıldığında,
- * adminse AdminDashboard’a,
- * değilse MainDashboard’a geri döner.
- */
 @FXML
 private void handleBack(ActionEvent event) {
     if (loggedInUser == null) {
-        System.err.println("handleBack: loggedInUser is null!");
-        new Alert(Alert.AlertType.ERROR, "Oturum bilgisi eksik. Geri dönüş yapılamıyor.").showAndWait();
+        System.err.println("logged in user is null");
+        new Alert(Alert.AlertType.ERROR, "Cannot be go back user infos are missing").showAndWait();
         return;
     }
     SceneChanger.goBackToDashboard(event, loggedInUser);
@@ -246,7 +222,6 @@ private void handleBack(ActionEvent event) {
             String description = descriptionArea.getText();
             String posterUrl = "";
             if (selectedPosterFile != null) {
-                // upload to Firebase Storage
                 String storageFileName = "posters/" + System.currentTimeMillis() + "_" + selectedPosterFile.getName();
                 try (FileInputStream fis = new FileInputStream(selectedPosterFile)) {
                     String contentType = Files.probeContentType(selectedPosterFile.toPath());
@@ -261,7 +236,7 @@ private void handleBack(ActionEvent event) {
                     );
                 } catch (Exception e) {
                     e.printStackTrace();
-                    new Alert(Alert.AlertType.ERROR, "Poster yüklenemedi: " + e.getMessage(), ButtonType.OK).showAndWait();
+                    new Alert(Alert.AlertType.ERROR, "Poster cannot be uploaded " + e.getMessage(), ButtonType.OK).showAndWait();
                     return;
                 }
             }
@@ -286,13 +261,11 @@ private void handleBack(ActionEvent event) {
 
             Firestore db = FirestoreClient.getFirestore();
             if (isEditMode) {
-                // Update existing event
                 db.collection("events").document(eventId).set(data).get();
                 db.collection("clubs")
                   .document(clubId)
                   .update("activeEventCount", FieldValue.increment(1))
                   .get();
-                // Navigate back to updated event detail view
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/event_detail.fxml"));
                 Parent root = loader.load();
                 EventDetailController detailCtrl = loader.getController();
@@ -308,16 +281,12 @@ private void handleBack(ActionEvent event) {
                 }
                 return;
             }
-            // for new event creation, keep existing logic
             else {
-                // Add new event
                 String newEventId = db.collection("events").add(data).get().getId();
-                // increment the club's active event count
                 db.collection("clubs")
                   .document(clubId)
                   .update("activeEventCount", FieldValue.increment(1))
                   .get();
-                // After creation, fallback to profile as before
                 SceneChanger.switchScene(event, "profile.fxml", controller -> {
                     if (controller instanceof ProfileController pc) {
                         pc.setUser(loggedInUser);
@@ -326,7 +295,7 @@ private void handleBack(ActionEvent event) {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Event oluşturulamadı: " + ex.getMessage(), ButtonType.OK)
+            new Alert(Alert.AlertType.ERROR, "Event cannot be created: " + ex.getMessage(), ButtonType.OK)
                 .showAndWait();
         }
     }

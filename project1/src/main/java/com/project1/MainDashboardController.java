@@ -58,7 +58,7 @@ public class MainDashboardController {
     private ImageView appLogo; 
     
      @FXML
-    private FlowPane mainEventContainer;// VBox yerine FlowPane
+    private FlowPane mainEventContainer;
 
         @FXML
     private ComboBox<String> sortComboBox;
@@ -68,10 +68,8 @@ public class MainDashboardController {
 
 @FXML
 public void initialize() {
-    System.out.println("🔥 initialize() çalıştı!");
+    System.out.println("initialize() starts");
     loadAppLogo();
-
-    // Populate sorting ComboBox
     sortComboBox.getItems().addAll(
         "Highest Rated",
         "Lowest Rated",
@@ -82,7 +80,6 @@ public void initialize() {
         "Upcoming Events"
     );
 
-    // Arama alanı dinleyicisi
     searchField.textProperty().addListener((obs, oldVal, newVal) -> handleSearch(null));
 
     Platform.runLater(() -> {
@@ -94,7 +91,7 @@ public void initialize() {
 @FXML
 private void handleSortSelection(ActionEvent event) {
     String selected = sortComboBox.getValue();
-    System.out.println("🔃 Sorting selected: " + selected);
+    System.out.println("Sorting selected: " + selected);
 
     switch (selected) {
         case "Highest Rated":
@@ -117,7 +114,7 @@ private void handleSortSelection(ActionEvent event) {
             loadUpcomingEvents();
             break;
         default:
-            loadEvents(); // default
+            loadEvents(); 
     }
 }
     
@@ -125,7 +122,7 @@ private void handleSortSelection(ActionEvent event) {
    @FXML
 private void handleSearch(ActionEvent event) {
     String keyword = searchField.getText().trim().toLowerCase();
-    System.out.println("🔎 Search: " + keyword);
+    System.out.println("Search: " + keyword);
     mainEventContainer.getChildren().clear();
 
     try {
@@ -143,7 +140,7 @@ private void handleSearch(ActionEvent event) {
 
             com.google.cloud.Timestamp ts = doc.getTimestamp("eventDate");
             if (ts != null && ts.toDate().before(new Date())) {
-                continue;  // geçmiş eventleri atla
+                continue;  
             }
 
             if ((name != null && name.toLowerCase().contains(keyword)) ||
@@ -189,18 +186,15 @@ private void handleSearch(ActionEvent event) {
         e.printStackTrace();
     }
 }
-    /**
-     * SignInController’dan geçirilen UserModel’i saklar
-     * ve UI’yı günceller (\"Hoş geldin Serra\" gibi).
-     */
+    
     public void setLoggedInUser(UserModel user) {
         this.loggedInUser = user;
-        System.out.println("👤 studentId = " + user.getStudentId());
-        System.out.println("❇ setLoggedInUser: clubId=" + user.getClubId() + ", clubName=" + user.getClubName());
+        System.out.println("studentId = " + user.getStudentId());
+        System.out.println("setLoggedInUser: clubId=" + user.getClubId() + ", clubName=" + user.getClubName());
         loadEvents();
     }
     private void loadAppLogo() {
-        // Load logos from application resources instead of Firebase
+        
         try {
             bilkentLogo.setImage(new Image(
                 getClass().getResourceAsStream("/images/bilcall_logo.png")
@@ -209,16 +203,16 @@ private void handleSearch(ActionEvent event) {
                 getClass().getResourceAsStream("/images/bilkent_logo.png")
             ));
         } catch (Exception e) {
-            System.err.println("❌ Logo yüklenirken hata: " + e.getMessage());
+            System.err.println("Logo error: " + e.getMessage());
             e.printStackTrace();
         }
     }
     
 
   private void loadEvents() {
-    System.out.println("🔄 loadEvents() başlıyor...");
+    System.out.println("loadEvents starts");
     mainEventContainer.getChildren().clear();
-    System.out.println("🗑️ Önceki kartlar temizlendi.");
+    System.out.println("cards are cleaned");
 
     try {
         List<com.google.cloud.firestore.QueryDocumentSnapshot> documents = com.google.firebase.cloud.FirestoreClient
@@ -228,28 +222,25 @@ private void handleSearch(ActionEvent event) {
                 .get()
                 .getDocuments();
 
-        System.out.println("📥 Firestore’dan " + documents.size() + " event belgesi alındı.");
+        System.out.println("From fb " + documents.size() + "is taken");
 
         for (com.google.cloud.firestore.QueryDocumentSnapshot doc : documents) {
             String eventId = doc.getId();
             Map<String, Object> data = doc.getData();
-            System.out.println("🎯 İşleniyor: eventId=" + eventId);
+            System.out.println("eventId=" + eventId);
 
-            // Show only events whose eventDate has not passed
             com.google.cloud.Timestamp ts = doc.getTimestamp("eventDate");
             if (ts != null && ts.toDate().before(new Date())) {
-                System.out.println("⌛ Event date passed, skipping: eventId=" + eventId);
+                System.out.println("event date passed skipping: eventId " + eventId);
                 continue;
             }
 
-            // 1) FXML + Controller
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/event_card.fxml"));
             VBox eventCard = loader.load();
             EventCardController controller = loader.getController();
             controller.setCurrentUser(loggedInUser);
-            System.out.println("   🔗 FXML yüklendi ve controller bağlandı.");
+            System.out.println("fxml loaded and controll is connected");
 
-            // 2) Kulüp adı & logo
             String clubId = (String) data.get("clubId");
             if (clubId != null && !clubId.isEmpty()) {
                 try {
@@ -265,33 +256,25 @@ private void handleSearch(ActionEvent event) {
                         if (logoUrl != null && !logoUrl.isEmpty()) {
                             data.put("logoUrl", logoUrl);
                         }
-                        System.out.println("   🏷️ clubName ve logoUrl ayarlandı.");
+                        System.out.println("clubName ve logoUrl are set.");
                     } else {
                         data.put("clubName", "Unknown Club");
-                        System.out.println("   ⚠️ clubDoc bulunamadı, fallback olarak Unknown Club.");
+                        System.out.println("clubDoc cannot be found");
                     }
                 } catch (Exception ex) {
                     data.put("clubName", "Unknown Club");
-                    System.out.println("   ❌ Club bilgisi alınamadı:");
+                    System.out.println("club info cannot be taken");
                     ex.printStackTrace();
                 }
             } else {
                 data.put("clubName", "Unknown Club");
-                System.out.println("   ⚠️ Event içinde clubId yok, fallback olarak Unknown Club.");
             }
 
-            // 3) Controller’a veri verme
             controller.setData(eventId, data);
-            System.out.println("   ✅ controller.setData() çağrıldı.");
-
-            // 4) FlowPane’e ekleme
             mainEventContainer.getChildren().add(eventCard);
-            System.out.println("   ➕ Event kartı FlowPane’e eklendi.");
         }
 
-        System.out.println("🔄 loadEvents() tamamlandı.");
     } catch (Exception e) {
-        System.out.println("❌ Hata: Eventler yüklenemedi");
         e.printStackTrace();
     }
 }
@@ -308,9 +291,6 @@ private void onProfileButtonClicked(ActionEvent event) {
 public void setUser(UserModel user) {
 
     this.loggedInUser = user;
-  
-    // Burası önemli: Eventleri yeniden yükle!
-    
     loadEvents();
    
 }
@@ -343,55 +323,50 @@ public void setUser(UserModel user) {
 
 
 
-/**
-     * TODO: implemented
-     * @author Serra
-     */
-    //firesotre şimdilik örnek event ekleme
-//    private void uploadDummyEventToFirestore() {
+// private void uploadDummyEventsToFirestore() {
 //     try {
 //         com.google.cloud.firestore.Firestore db = com.google.firebase.cloud.FirestoreClient.getFirestore();
-
-//         // 🔹 Club bilgileri
-//         String clubId = "cs_club";
-//         com.google.cloud.firestore.DocumentSnapshot clubDoc = db.collection("clubs").document(clubId).get().get();
-
-//         String clubName;
-//         if (!clubDoc.exists()) {
-//             // 🔸 Eğer kulüp yoksa, yeni kulüp belgesi oluştur
-//             Map<String, Object> club = new HashMap<>();
-//             clubName = "Computer Science Club";
-//             club.put("name", clubName);
-//             club.put("logoUrl", "https://via.placeholder.com/60x60.png");
-
-//             db.collection("clubs").document(clubId).set(club);
-//             System.out.println("✅ Dummy club 'cs_club' Firestore'a yüklendi.");
-//         } else {
-//             // 🔸 Kulüp varsa ismini al
-//             clubName = (String) clubDoc.get("name");
-//         }
-
-//         // 🔹 Şu anki zamanı al
 //         Timestamp now = Timestamp.now();
 
-//         // 🔹 Dummy event bilgileri
-//         Map<String, Object> event = new HashMap<>();
-//         event.put("name", "Tech Talk 2025");
-//         event.put("description", "AI and the Future of Computing");
-//         event.put("eventType", "event");
-//         event.put("clubId", clubId);
-//         event.put("clubName", clubName); // 👈 Artık her zaman vardır
-//         event.put("timestamp", now);
-//         event.put("eventDate", now);
-//         event.put("location", "Bilkent EE-01");
-//         event.put("minParticipants", 10);
-//         event.put("maxParticipants", 100);
-//         event.put("currentParticipants", 4);
-//         event.put("posterUrl", "https://via.placeholder.com/400x180.png");
+//         List<Map<String, Object>> events = Arrays.asList(
+//             new HashMap<String, Object>() {{
+//                 put("name", "Calculus Workshop");
+//                 put("description", "Multiple Integrals & Applications");
+//                 put("eventType", "workshop");
+//                 put("clubId", "math_club");
+//                 put("clubName", "Mathematics Club");
+//                 put("timestamp", now);
+//                 put("eventDate", new Date(2025 - 1900, Calendar.JULY, 20, 15, 0, 0));
+//                 put("location", "Bilkent MA-02");
+//                 put("minParticipants", 10);
+//                 put("maxParticipants", 50);
+//                 put("currentParticipants", 12);
+//                 put("posterUrl", "https://via.placeholder.com/400x180.png");
+//             }},
+//             new HashMap<String, Object>() {{
+//                 put("name", "Summer Hackathon");
+//                 put("description", "Build your first full-stack app in 24h");
+//                 put("eventType", "hackathon");
+//                 put("clubId", "hack_club");
+//                 put("clubName", "Hackathon Club");
+//                 put("timestamp", now);
+//                 put("eventDate", new Date(2025 - 1900, Calendar.AUGUST, 5, 9, 30, 0));
+//                 put("location", "Bilkent CC-10");
+//                 put("minParticipants", 5);
+//                 put("maxParticipants", 80);
+//                 put("currentParticipants", 40);
+//                 put("posterUrl", "https://via.placeholder.com/400x180.png");
+//             }}
+//         );
 
-//         // 🔹 Event Firestore’a ekleniyor
-//         com.google.cloud.firestore.DocumentReference docRef = db.collection("events").add(event).get();
-//         System.out.println("✅ Dummy event Firestore'a yüklendi: " + docRef.getId());
+    
+//         for (Map<String, Object> event : events) {
+//             com.google.cloud.firestore.DocumentReference docRef = db
+//                 .collection("events")
+//                 .add(event)
+//                 .get();  
+//             System.out.println("Dummy event yüklendi: " + docRef.getId());
+//         }
 
 //     } catch (Exception e) {
 //         e.printStackTrace();
@@ -399,61 +374,6 @@ public void setUser(UserModel user) {
 // }
 
 
-private void uploadDummyEventsToFirestore() {
-    try {
-        com.google.cloud.firestore.Firestore db = com.google.firebase.cloud.FirestoreClient.getFirestore();
-        Timestamp now = Timestamp.now();
-
-        // 🔹 Birden fazla dummy event bilgisi
-        List<Map<String, Object>> events = Arrays.asList(
-            new HashMap<String, Object>() {{
-                put("name", "Calculus Workshop");
-                put("description", "Multiple Integrals & Applications");
-                put("eventType", "workshop");
-                put("clubId", "math_club");
-                put("clubName", "Mathematics Club");
-                put("timestamp", now);
-                put("eventDate", new Date(2025 - 1900, Calendar.JULY, 20, 15, 0, 0));
-                put("location", "Bilkent MA-02");
-                put("minParticipants", 10);
-                put("maxParticipants", 50);
-                put("currentParticipants", 12);
-                put("posterUrl", "https://via.placeholder.com/400x180.png");
-            }},
-            new HashMap<String, Object>() {{
-                put("name", "Summer Hackathon");
-                put("description", "Build your first full-stack app in 24h");
-                put("eventType", "hackathon");
-                put("clubId", "hack_club");
-                put("clubName", "Hackathon Club");
-                put("timestamp", now);
-                put("eventDate", new Date(2025 - 1900, Calendar.AUGUST, 5, 9, 30, 0));
-                put("location", "Bilkent CC-10");
-                put("minParticipants", 5);
-                put("maxParticipants", 80);
-                put("currentParticipants", 40);
-                put("posterUrl", "https://via.placeholder.com/400x180.png");
-            }}
-        );
-
-        // 🔹 Her bir event’i Firestore’a ekle
-        for (Map<String, Object> event : events) {
-            com.google.cloud.firestore.DocumentReference docRef = db
-                .collection("events")
-                .add(event)
-                .get();  // Bekle ve referansı al
-            System.out.println("✅ Dummy event yüklendi: " + docRef.getId());
-        }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
-    
-
-
-// --- Sorting and Filtering Methods ---
 
 private void loadEventsSortedByRating(boolean descending) {
     mainEventContainer.getChildren().clear();
@@ -498,7 +418,7 @@ private void loadEventsSortedByParticipantCount(boolean descending) {
 }
 
 private void loadEventsFromJoinedClubs() {
-    System.out.println("💡 loadEventsFromJoinedClubs() çağrıldı.");
+    System.out.println("loadEventsFromJoinedClubs");
     mainEventContainer.getChildren().clear();
     List<String> joinedClubIds = new ArrayList<>();
     String studentId = loggedInUser.getStudentId();
@@ -512,7 +432,7 @@ private void loadEventsFromJoinedClubs() {
                 .get();
         List<com.google.cloud.firestore.QueryDocumentSnapshot> userDocs = userSnapshots.getDocuments();
         if (!userDocs.isEmpty()) {
-            currentUserId = userDocs.get(0).getId(); // document ID is UID
+            currentUserId = userDocs.get(0).getId();
         }
     } catch (Exception e) {
         e.printStackTrace();
@@ -526,20 +446,20 @@ private void loadEventsFromJoinedClubs() {
                 .get()
                 .getDocuments();
 
-        System.out.println("📘 Kulüpler döngüsüne girildi.");
+
         for (com.google.cloud.firestore.QueryDocumentSnapshot clubDoc : clubDocs) {
             String clubId = clubDoc.getId();
             List<String> participants = (List<String>) clubDoc.get("participants");
 
-            System.out.println("🟢 CLUB: " + clubId);
-            System.out.println("👤 Current User ID: " + currentUserId);
-            System.out.println("👥 Participants: " + participants);
+            System.out.println("CLUB: " + clubId);
+            System.out.println("Current User ID: " + currentUserId);
+            System.out.println("Participants: " + participants);
 
             if (participants != null && currentUserId != null && participants.contains(currentUserId)) {
-                System.out.println("✅ MATCH: User joined club " + clubId);
+                System.out.println( "user joined club " + clubId);
                 joinedClubIds.add(clubId);
             } else {
-                System.out.println("❌ NO MATCH for " + clubId);
+                System.out.println("no match " + clubId);
             }
         }
     } catch (Exception e) {
