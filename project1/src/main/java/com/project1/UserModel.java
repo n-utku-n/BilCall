@@ -1,11 +1,11 @@
 package com.project1;
+
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 
 /**
  * Model class representing a user in the application.
@@ -37,17 +37,18 @@ public class UserModel {
      * No-argument constructor required by Firestore.
      */
     public UserModel() {
-        // Firestore'un objeyi deserialize edebilmesi için boş constructor şart
+        // Firestore requires a no-argument constructor to deserialize the object
+        // properly.
     }
 
-     /**
+    /**
      * Constructs a user with all required fields.
      *
-     * @param name       User's first name
-     * @param surname    User's last name
-     * @param studentId  Bilkent student ID
-     * @param email      User's email address
-     * @param role       Role of the user (e.g., student, club_manager, admin)
+     * @param name      User's first name
+     * @param surname   User's last name
+     * @param studentId Bilkent student ID
+     * @param email     User's email address
+     * @param role      Role of the user (e.g., student, club_manager, admin)
      */
     public UserModel(String name, String surname, String studentId, String email, String role) {
         this.name = name;
@@ -63,10 +64,23 @@ public class UserModel {
     public String getName() {
         return name;
     }
-    public String getUid() { return uid; }
-    public void setUid(String uid) { this.uid = uid; }
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     /** @return the user's last name */
     public String getSurname() {
         return surname;
@@ -86,11 +100,12 @@ public class UserModel {
     public String getRole() {
         return role;
     }
-        public static UserModel getCurrentUser() {
+
+    public static UserModel getCurrentUser() {
         return currentUser;
     }
 
-    // Setters (Firestore için gerekli olabilir)
+    // Setters
 
     /** @param name sets the user's first name */
     public void setName(String name) {
@@ -114,12 +129,13 @@ public class UserModel {
 
     /** @param role sets the user's role */
     public void setRole(String role) {
-        this.role = role; 
+        this.role = role;
     }
 
-      public String getClubId() {
+    public String getClubId() {
         return clubId;
     }
+
     public void setClubId(String clubId) {
         this.clubId = clubId;
     }
@@ -127,17 +143,20 @@ public class UserModel {
     public String getClubName() {
         return clubName;
     }
+
     public void setClubName(String clubName) {
         this.clubName = clubName;
     }
-        public static void setCurrentUser(UserModel user) {
+
+    public static void setCurrentUser(UserModel user) {
         currentUser = user;
     }
 
-
     /**
      * Returns a list of club IDs that this user follows.
-     * Checks Firestore "clubs" collection for club documents where this user's UID is in the followers array.
+     * Checks Firestore "clubs" collection for club documents where this user's UID
+     * is in the followers array.
+     * 
      * @return List of followed club IDs.
      */
     public List<String> getFollowedClubs() {
