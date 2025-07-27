@@ -176,19 +176,7 @@ private void onOpenLeadershipRequests(ActionEvent event) {
 
             // Detail and delete button
             controller.getDeleteButton().setOnAction(e -> deleteUser(userId));
-            controller.getDetailsButton().setOnAction(e -> {
-            String uid = doc.getId();
-            ActionEvent ae = new ActionEvent((Node)e.getSource(), null);
-            SceneChanger.switchScene(
-                ae,
-                "profile.fxml",
-                ctr -> {
-                    ProfileController pc = (ProfileController) ctr;
-                    pc.setViewerUser(loggedInUser);
-                    pc.loadUser(uid);
-                }
-            );
-        });
+            
 
             // Add to List
             userListBox.getChildren().add(userCard);

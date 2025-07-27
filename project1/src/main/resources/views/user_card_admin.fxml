@@ -17,10 +17,7 @@
 
 
     <Button fx:id="changeRoleButton" text="Change Role" onAction="#handleChangeRole"/>
-<Button
-    fx:id="detailsButton"
-    text="Details"
-/>
+
     <Button fx:id="deleteButton" text="Delete" style="-fx-text-fill: red;"/>
 
 </HBox>
