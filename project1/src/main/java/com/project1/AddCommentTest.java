@@ -17,10 +17,8 @@ import java.util.Map;
 
 public class AddCommentTest {
 
-    // TODO: replace with your target event ID
     private static final String EVENT_ID = "0wCZU1aaMHqiifOCmtcW";
 
-    // TODO: adjust path if your JSON file is elsewhere
     // private static final String SERVICE_ACCOUNT_PATH = "src/main/resources/serviceAccountKey.json";
 
     public static void main(String[] args) throws Exception {
@@ -32,12 +30,12 @@ public class AddCommentTest {
         for (String eid : eventIds) {
             for (String uid : userIds) {
                 addComment(eid, uid,
-                    "Olay hakkındaki yorumum (" + eid + ", " + uid + ")", 
+                    "My comment about the event (" + eid + ", " + uid + ")", 
                     1 + new java.util.Random().nextInt(5));
             }
         }
 
-        System.out.println("✅ Örnek yorumlar eklendi.");
+        System.out.println("Sample comments have been added");
         // Close the app if needed:
         // FirebaseApp.getInstance().delete();
     }
@@ -75,9 +73,9 @@ public class AddCommentTest {
 
         try {
             DocumentReference ref = commentsRef.add(comment).get();
-            System.out.println("Yorum eklendi, ID: " + ref.getId());
+            System.out.println("Comment added, ID: " + ref.getId());
         } catch (Exception e) {
-            System.err.println("Yorum eklenirken hata: " + e.getMessage());
+            System.err.println("Failed to add comment: " + e.getMessage());
         }
     }
 }
