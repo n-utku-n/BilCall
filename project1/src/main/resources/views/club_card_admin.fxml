@@ -31,8 +31,8 @@
 
         <!-- Action Buttons -->
         <VBox spacing="8" alignment="TOP_RIGHT">
-            <Button fx:id="viewButton" text="📄 View" onAction="#handleView" />
-            <Button fx:id="deleteButton" text="🗑 Delete" onAction="#handleDelete"
+            <Button fx:id="viewButton" text=" View" onAction="#handleView" />
+            <Button fx:id="deleteButton" text=" Delete" onAction="#handleDelete"
                     style="-fx-background-color: #ff4d4d; -fx-text-fill: white;" />
         </VBox>
     </HBox>

@@ -9,7 +9,7 @@
             fx:controller="com.project1.EventDetailAdminController"
             style="-fx-padding: 20;">
 
-   
+
     <top>
         <VBox spacing="10">
             <Label fx:id="eventNameLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
@@ -17,7 +17,7 @@
         </VBox>
     </top>
 
-    
+
     <center>
         <VBox spacing="15">
             <Label text="Description" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
@@ -30,16 +30,15 @@
         </VBox>
     </center>
 
-   
+
     <left>
         <VBox fx:id="clubCardPlaceholder"/>
     </left>
 
-  
     <bottom>
         <HBox alignment="CENTER_RIGHT" spacing="10">
-            <Button text="⬅ Back" onAction="#handleBack"/>
-            <Button text="🗑 Delete Event" onAction="#handleDeleteEvent" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;"/>
+            <Button text=" Back" onAction="#handleBack"/>
+            <Button text=" Delete Event" onAction="#handleDeleteEvent" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;"/>
         </HBox>
     </bottom>
 </BorderPane>

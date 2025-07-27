@@ -83,7 +83,7 @@ private void handleSignIn(ActionEvent event) {
                 return;
             }
 
-            // ① Firestore’dan okunan alanlarla UserModel oluşturun
+            // Create UserModel with fields read from Firestore
             UserModel user = new UserModel(
                 document.getString("name"),
                 document.getString("surname"),
@@ -92,13 +92,13 @@ private void handleSignIn(ActionEvent event) {
                 document.getString("role")
             );
             user.setUid(uid);
-            // Eğer clubId/clubName de varsa
+            // If clubId/clubName is also present
             if (document.contains("clubId"))   user.setClubId(document.getString("clubId"));
             if (document.contains("clubName")) user.setClubName(document.getString("clubName"));
 
             errorLabel.setText("");
 
-            // ② role’a göre sahne değiştirirken UserModel’i de geçiriyoruz
+            // When changing the scene based on the role, we also pass the UserModel
             switch (user.getRole()) {
                 case "student", "club_manager" -> 
                     SceneChanger.switchScene(event, "main_dashboard.fxml", ctrl -> {

@@ -10,7 +10,7 @@
             fx:controller="com.project1.CreateEventController"
             stylesheets="@/style/create_event.css">
 
-  <!-- Üst çubuk: Başlık + Geri butonu -->
+
   <top>
     <ToolBar>
       <Button
@@ -23,18 +23,18 @@
     </ToolBar>
   </top>
 
-  <!-- Ana form -->
+
   <center>
     <ScrollPane fitToWidth="true">
       <VBox spacing="15" style="-fx-padding: 20;">
 
-        <!-- Event adı -->
+
         <HBox spacing="10" alignment="CENTER_LEFT">
           <Label text="Event Name:" minWidth="120"/>
           <TextField fx:id="nameField" promptText="e.g. Tech Talk 2025" />
         </HBox>
 
-        <!-- Event tipi -->
+
         <HBox spacing="10" alignment="CENTER_LEFT">
           <Label text="Event Type:" minWidth="120"/>
           <ChoiceBox fx:id="typeChoice">
@@ -50,7 +50,7 @@
           </ChoiceBox>
         </HBox>
 
-        <!-- Tarih ve Saat -->
+
         <HBox spacing="10">
           <Label text="Date:" minWidth="120"/>
           <DatePicker fx:id="datePicker"/>
@@ -59,13 +59,12 @@
           <Spinner fx:id="minuteSpinner" prefWidth="70" />
         </HBox>
 
-        <!-- Yer (Location) -->
         <HBox spacing="10" alignment="CENTER_LEFT">
           <Label text="Location:" minWidth="120"/>
           <TextField fx:id="locationField" promptText="e.g. Bilkent EE-01"/>
         </HBox>
 
-        <!-- Min / Max Katılımcı -->
+
         <HBox spacing="10" alignment="CENTER_LEFT">
           <Label text="Min Participants:" minWidth="120"/>
           <Spinner fx:id="minPartSpinner" prefWidth="80"/>
@@ -73,13 +72,13 @@
           <Spinner fx:id="maxPartSpinner" prefWidth="80"/>
         </HBox>
 
-        <!-- Açıklama (Description) -->
+        
         <VBox spacing="5">
           <Label text="Description:"/>
           <TextArea fx:id="descriptionArea" prefRowCount="4" wrapText="true"/>
         </VBox>
 
-        <!-- Poster Yükleme -->
+
         <HBox spacing="10" alignment="CENTER_LEFT">
           <Label text="Event Poster:" minWidth="120"/>
           <Button text="Choose Image…" onAction="#handleChooseImage"/>
@@ -90,7 +89,7 @@
     </ScrollPane>
   </center>
 
-  <!-- Alt çubuk: Kaydet / İptal -->
+
   <bottom>
     <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10;">
       <Button text="Cancel" onAction="#handleBack"/>

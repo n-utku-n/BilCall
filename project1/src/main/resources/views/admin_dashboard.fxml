@@ -13,7 +13,6 @@
             stylesheets="@../style/admin_dashboard.css"
             style="-fx-background-color: #FAFAFA;">
 
-    <!-- ÜST BAR (Logo + Başlık + Profil) -->
     <HBox fx:id="topBar" spacing="20" alignment="CENTER_LEFT" prefHeight="100"
           AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
           style="-fx-background-color: #FAFAFA;">
@@ -56,7 +55,7 @@
             </graphic>
         </Button>
 
-    </HBox> <!-- 💥 EKLENEN KAPANIŞ SATIRI -->
+    </HBox> 
 
     <!-- SEARCH & FILTER BAR -->
     <HBox fx:id="searchBar" spacing="10" alignment="CENTER_LEFT"

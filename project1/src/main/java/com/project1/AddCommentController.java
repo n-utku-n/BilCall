@@ -31,9 +31,6 @@ import com.google.firebase.cloud.FirestoreClient;
 import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
 
-/**
- * Initialize context by fetching event name from Firestore.
- */
 public class AddCommentController {
     @FXML private Button backButton;
     @FXML private Label eventNameLabel;
@@ -73,21 +70,19 @@ public class AddCommentController {
         });
     }
 
-    /** Etkinlik bilgisini alır ve başlık etiketini günceller. */
+
     public void setEventContext(String eventId, String eventName) {
         this.eventId = eventId;
         this.eventName = eventName;
         eventNameLabel.setText(eventName != null ? eventName : "");
     }
 
-    /**
-     * Oturum açmış kullanıcı modelini ayarlar ve başlıkta gösterir.
-     */
+
     public void setCurrentUser(UserModel user) {
         System.out.println("AddCommentController setCurrentUser: " + user);
         this.currentUser = user;
 
-        // Ad Soyad – Öğrenci No – Rol şeklinde label
+      
         String namePart = user.getName() != null ? user.getName() : "N/A";
         String surnamePart = user.getSurname() != null && !user.getSurname().isEmpty()
                              ? user.getSurname() : "N/A";
@@ -105,7 +100,6 @@ public class AddCommentController {
 
     @FXML
     private void initialize() {
-        // 5 tıklanabilir yıldız oluştur
        
         IntStream.rangeClosed(1, 5)
                  .forEach(i -> {
@@ -115,12 +109,9 @@ public class AddCommentController {
                  });
     }
 
-    /**
-     * Switch to edit mode with existing comment data.
-     */
+  
     public void setEditMode(String commentId, String existingText, int existingRating) {
         this.editingCommentId = commentId;
-        // Orijinal verileri kaydet
         this.originalText = existingText;
         this.originalRating = existingRating;
         commentTextArea.setText(existingText);
@@ -154,7 +145,6 @@ private void handleBack() {
 
     @FXML
     private void handleSubmit() {
-           // Eğer edit modundaysak, ama metin ve puan orijinalle aynıysa hiçbir şey yapma, sadece geri dön
         String newText = commentTextArea.getText().trim();
         if (editingCommentId != null
          && newText.equals(originalText)
@@ -194,7 +184,6 @@ private void handleBack() {
             DocumentReference eventRef = db.collection("events").document(evId);
             CollectionReference commentsCol = eventRef.collection("comments");
 
-            // 1) Yeni yorumu ekle
             Map<String,Object> data = new HashMap<>();
             data.put("eventId",   evId);
             data.put("userName",  currentUser.getName() 
@@ -209,7 +198,6 @@ private void handleBack() {
 
             commentsCol.add(data).get();
 
-            // 2) Event belgesinde transaction ile rating ve participant sayısını güncelle
             db.runTransaction(transaction -> {
                 DocumentSnapshot eventSnap = transaction.get(eventRef).get();
 
@@ -258,23 +246,14 @@ private void updateComment(String text, int rating) {
             DocumentReference commentRef = eventRef.collection("comments").document(commentId);
 
             db.runTransaction(transaction -> {
-                // 1. Eski rating'i bul
                 DocumentSnapshot commentSnap = transaction.get(commentRef).get();
                 double oldRating = commentSnap.contains("rating") ? commentSnap.getDouble("rating") : 0.0;
-
-                // 2. Event'in mevcut ratingSum ve ratingCount'unu bul
                 DocumentSnapshot eventSnap = transaction.get(eventRef).get();
                 double ratingSum = eventSnap.contains("ratingSum") ? eventSnap.getDouble("ratingSum") : 0.0;
                 long ratingCount = eventSnap.contains("ratingCount") ? eventSnap.getLong("ratingCount") : 0;
-
-                // 3. Yeni toplam ve ortalamayı hesapla
                 double newSum = ratingSum - oldRating + rating;
                 double newAvg = ratingCount > 0 ? newSum / ratingCount : 0.0;
-
-                // 4. Event'i güncelle
                 transaction.update(eventRef, "ratingSum", newSum, "averageRating", newAvg);
-
-                // 5. Yorumu güncelle
                 Map<String, Object> updates = new HashMap<>();
                 updates.put("text", text);
                 updates.put("rating", (double) rating);
