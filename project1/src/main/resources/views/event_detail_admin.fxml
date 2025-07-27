@@ -9,7 +9,7 @@
             fx:controller="com.project1.EventDetailAdminController"
             style="-fx-padding: 20;">
 
-    <!-- Üst: Başlık ve görsel -->
+   
     <top>
         <VBox spacing="10">
             <Label fx:id="eventNameLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
@@ -17,7 +17,7 @@
         </VBox>
     </top>
 
-    <!-- Orta: Açıklamalar ve kurallar -->
+    
     <center>
         <VBox spacing="15">
             <Label text="Description" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
@@ -30,12 +30,12 @@
         </VBox>
     </center>
 
-    <!-- Sol: Kulüp kartı -->
+   
     <left>
         <VBox fx:id="clubCardPlaceholder"/>
     </left>
 
-    <!-- Alt: Butonlar -->
+  
     <bottom>
         <HBox alignment="CENTER_RIGHT" spacing="10">
             <Button text="⬅ Back" onAction="#handleBack"/>

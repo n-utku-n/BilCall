@@ -12,7 +12,7 @@
       styleClass="club-card"
       stylesheets="@../style/club_card.css">
 
-    <!-- Kulüp Logosu -->
+  
     <StackPane>
         <ImageView fx:id="clubLogo"
                    fitWidth="60"
@@ -25,7 +25,7 @@
         </ImageView>
     </StackPane>
 
-    <!-- Kulüp Bilgileri -->
+  
     <VBox spacing="5" styleClass="info-vbox">
         <Label fx:id="clubNameLabel" />
         <Label fx:id="eventCountLabel" />
@@ -33,10 +33,10 @@
         <Label fx:id="managerCountLabel" />
     </VBox>
 
-    <!-- Boşluk bırak -->
+    
     <Pane HBox.hgrow="ALWAYS"/>
 
-    <!-- Detay butonu (Sayfaya yönlendirir) -->
+    
     <Button text="View"
             styleClass="view-button"
             onAction="#handleView"/>
