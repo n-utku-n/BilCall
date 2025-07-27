@@ -1,9 +1,7 @@
-/* Root BorderPane */
 .club-profile {
     -fx-background-color: #f2f2f7;
 }
 
-/* Header HBox */
 .cp-header {
     -fx-background-color: white;
     -fx-background-radius: 12;
@@ -14,7 +12,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
 }
 
-/* Center content VBox */
 .cp-center {
     -fx-background-color: white;
     -fx-background-radius: 12;
@@ -24,7 +21,7 @@
     -fx-alignment: center;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 1);
 }
-/* ScrollPane backgrounds - transparent to show card edges */
+
 .page-scroll,
 .page-scroll .viewport,
 .events-scroll,
@@ -33,35 +30,29 @@
     -fx-border-color: transparent;
 }
 
-/* Frame and oval corners around event scroll areas */
 .events-scroll {
-    -fx-background-color: transparent;      /* keep scroll background transparent */
-    -fx-border-color: #d0d0d5;              /* light gray border */
-    -fx-border-width: 1;                    /* thin border line */
-    -fx-border-radius: 30;                  /* make corners highly rounded */
-    -fx-background-radius: 30;              /* match rounding on background */
-    -fx-pref-height: 450;                   /* existing height setting */
+    -fx-background-color: transparent;     
+    -fx-border-color: #d0d0d5;              
+    -fx-border-width: 1;                    
+    -fx-border-radius: 30;                 
+    -fx-background-radius: 30;              
+    -fx-pref-height: 450;                   
 }
 
-
-/* General Label styling */
 .club-profile Label {
     -fx-text-fill: #333333;
 }
 
-/* Club Name Label */
 #clubNameLabel {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
 
-/* Foundation Date Label */
 #foundationDateLabel {
     -fx-font-size: 14px;
     -fx-text-fill: #555555;
 }
 
-/* Description area styling */
 .description-label {
     -fx-wrap-text: true;
     -fx-padding: 8 16;
@@ -72,7 +63,6 @@
     -fx-background-radius: 20;
 }
 
-/* Managers ListView styling */
 .managers-container {
     -fx-spacing: 4;
     -fx-alignment: center;
@@ -88,13 +78,11 @@
     -fx-background-radius: 15;
 }
 
-/* Event Cards & List containers alignment */
 .event-cards, .event-list {
     -fx-alignment: center;
     -fx-spacing: 10;
 }
 
-/* Styled Back button with oval shape and drop shadow */
 .back-button {
     -fx-background-color: #326FFF;
     -fx-text-fill: white;
@@ -108,7 +96,7 @@
 .back-button:hover {
     -fx-background-color: #1F57C0;
 }
-/* Event FlowPane - white card with rounding */
+
 .event-flowpane {
     -fx-background-color: white;
     -fx-background-radius: 8;
@@ -118,7 +106,6 @@
     -fx-vgap: 16;
 }
 
-/* Oval frame around event sections */
 .events-container {
     -fx-background-color: white;
     -fx-border-color: #d0d0d5;
@@ -127,7 +114,6 @@
     -fx-background-radius: 30;
 }
 
-/* Follow button - default (green) */
 .follow-button {
     -fx-background-color: #28a745;
     -fx-text-fill: white;
@@ -140,7 +126,6 @@
     -fx-background-color: #218838;
 }
 
-/* Unfollow button (red) */
 .unfollow-button {
     -fx-background-color: #dc3545;
     -fx-text-fill: white;
@@ -152,7 +137,7 @@
 .unfollow-button:hover {
     -fx-background-color: #c82333;
 }
-/* Follow button - default (green) */
+
 .follow-button {
     -fx-background-color: #28a745;
     -fx-text-fill: white;
@@ -165,7 +150,6 @@
     -fx-background-color: #218838;
 }
 
-/* Unfollow button (red) */
 .unfollow-button {
     -fx-background-color: #dc3545;
     -fx-text-fill: white;

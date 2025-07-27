@@ -26,7 +26,7 @@
   -fx-arc-height: 16;
 }
 .event-image {
-  /* FXML fitWidth/fitHeight kullanır */
+  
 }
 .event-card-content {
   -fx-alignment: center-left;
@@ -53,7 +53,7 @@
   -fx-fill: #EF4444;
   -fx-width: 2px;
   -fx-height: 16px;
-  -fx-translate-y: 0; /* Ortada dursun */
+  -fx-translate-y: 0; 
 }
 .participant-number,
 .participant-slash { -fx-font-size: 10px; -fx-text-fill: #111; -fx-padding: 0 4 0 4; -fx-font-style: italic; }
@@ -64,7 +64,7 @@
 }
 .rating-stars {
   -fx-font-size: 14px;
-  -fx-text-fill: #FFD600; /* parlak sarı */
+  -fx-text-fill: #FFD600;
 }
 .rating-value {
   -fx-font-size: 12px;
@@ -72,7 +72,6 @@
   -fx-padding: 0 0 0 4;
 }
 
-/* Edit and Delete buttons on event cards for club managers */
 .event-card #editButton {
     -fx-background-color: #3B82F6;
     -fx-border-color: transparent;
@@ -97,7 +96,6 @@
     -fx-background-color: #DC2626;
 }
 
-/* "Event Full" label shown when a club-manager’s event is full */
 .event-card #eventFullLabel {
     -fx-background-color: transparent;
     -fx-text-fill: #EF4444;
@@ -105,6 +103,6 @@
     -fx-padding: 0;
     -fx-background-radius: 0;
     -fx-alignment: top-right;
-    -fx-translate-y: 220;    /* keep it at the same vertical offset */
-    -fx-translate-x: -8;     /* same horizontal offset */
+    -fx-translate-y: 220;   
+    -fx-translate-x: -8;     
 }

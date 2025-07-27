@@ -1,16 +1,12 @@
-
-/* Root AnchorPane style (optional if set externally) */
 .anchor-pane {
     -fx-background-color: #f4f6f9;
 } 
 
-/* Title Label */
 .label {
     -fx-font-family: "Segoe UI", sans-serif;
     -fx-text-fill: #2c3e50;
 }
 
-/* Container for club list */
 #clubListContainer {
     -fx-padding: 10;
     -fx-background-color: #ffffff;
@@ -20,7 +16,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
 }
 
-/* Back button */
 .button {
     -fx-background-color: #0984e3;
     -fx-text-fill: white;
