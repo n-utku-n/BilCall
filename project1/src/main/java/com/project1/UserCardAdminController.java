@@ -15,7 +15,6 @@ public class UserCardAdminController {
     @FXML private Label roleLabel;
     @FXML private ComboBox<String> roleComboBox;
     @FXML private Button changeRoleButton;
-    @FXML private Button detailsButton;
     @FXML private Button deleteButton;
 
     private String userId;
@@ -44,9 +43,9 @@ public class UserCardAdminController {
 
     public void setClubList(List<DocumentSnapshot> clubDocs) {
         roleComboBox.getItems().clear();          
-        roleComboBox.getItems().add("Student");   // add always student option
+        roleComboBox.getItems().add("Student");   
 
-        clubNameToIdMap.clear();                  // Eski eşleşmeleri sıfırla
+        clubNameToIdMap.clear();                  
 
         for (DocumentSnapshot doc : clubDocs) {
             String id = doc.getId();
@@ -135,9 +134,6 @@ private void addUserToSelectedClub(String clubId) {
         return deleteButton;
     }
 
-    public Button getDetailsButton() {
-        return detailsButton;
-    }
 
     public String getUserId() {
         return userId;
