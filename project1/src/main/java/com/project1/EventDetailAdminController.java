@@ -66,7 +66,7 @@ public class EventDetailAdminController {
         int min = (int) data.get("minParticipants");
         int max = (int) data.get("maxParticipants");
         int current = (int) data.get("currentParticipants");
-        participantInfoLabel.setText("👥 Participants: " + current + " (Min: " + min + ", Max: " + max + ")");
+        participantInfoLabel.setText("Participants: " + current + " (Min: " + min + ", Max: " + max + ")");
 
         // Set image if available
         String posterUrl = (String) data.get("posterUrl");
@@ -74,7 +74,7 @@ public class EventDetailAdminController {
             try {
                 eventImage.setImage(new Image(posterUrl, true));
             } catch (Exception e) {
-                System.out.println("⚠️ Invalid poster URL: " + posterUrl);
+                System.out.println("Invalid poster URL: " + posterUrl);
             }
         }
 
@@ -103,7 +103,7 @@ public class EventDetailAdminController {
 
                 clubCardPlaceholder.getChildren().add(clubCard);
             } else {
-                Label fallback = new Label("❌ Club info not found.");
+                Label fallback = new Label("Club info not found.");
                 clubCardPlaceholder.getChildren().add(fallback);
             }
 

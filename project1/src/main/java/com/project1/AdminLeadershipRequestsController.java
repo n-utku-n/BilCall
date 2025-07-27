@@ -19,17 +19,36 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Controller for displaying and managing leadership requests submitted by users.
+ * <p>
+ * Loads pending requests from the Firestore collection "leadership_requests" and
+ * presents each request with an option to delete it. Provides navigation back to the
+ * admin dashboard.
+ * </p>
+ * @author Utku
+ */
 public class AdminLeadershipRequestsController implements Initializable {
 
     @FXML private VBox requestListContainer;
 
+    /**
+     * Called to initialize the controller after its root element has been completely processed.
+     * @param location  The location used to resolve relative paths for the root object, or null if unknown.
+     * @param resources The resources used to localize the root object, or null if none.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadRequests();
     }
 
+    /**
+     * Loads all pending leadership requests from Firestore and adds them to the UI.
+     * Each request is displayed with the applicant's email and the club name,
+     * along with a button to delete the request.
+     */
     private void loadRequests() {
-        requestListContainer.getChildren().clear(); // her seferinde temizle
+        requestListContainer.getChildren().clear(); 
         Firestore db = FirestoreClient.getFirestore();
         ApiFuture<QuerySnapshot> future = db.collection("leadership_requests").get();
 
@@ -46,7 +65,7 @@ public class AdminLeadershipRequestsController implements Initializable {
                     Platform.runLater(() -> {
                         Label msg = new Label(email + " applied for " + clubName);
                         msg.getStyleClass().add("label");
-                        Button deleteBtn = new Button("🗑️");
+                        Button deleteBtn = new Button("Delete");
 
                         deleteBtn.setOnAction(e -> handleDelete(requestId));
 
@@ -59,7 +78,11 @@ public class AdminLeadershipRequestsController implements Initializable {
             }
         }).start();
     }
-
+    /**
+     * Deletes the specified leadership request document from Firestore.
+     * Shows a confirmation alert once deletion is complete and reloads the request list.
+     * @param requestId The Firestore document ID of the leadership request to delete.
+     */
     private void handleDelete(String requestId) {
         Firestore db = FirestoreClient.getFirestore();
 
@@ -81,13 +104,18 @@ public class AdminLeadershipRequestsController implements Initializable {
         }).start();
     }
 
+    /**
+     * Handles the action of the Back button, switching the scene to the admin dashboard.
+     * Passes the current user model to the dashboard controller.
+     * @param event The action event triggered by clicking the Back button.
+     */
     @FXML
 private void handleBack(ActionEvent event) {
     FXMLLoader loader = SceneChanger.switchScene(event, "admin_dashboard.fxml");
     if (loader != null) {
         AdminDashboardController ctrl = loader.getController();
         if (ctrl != null) {
-            ctrl.setLoggedInUser(UserModel.getCurrentUser()); // 👈 önemli olan bu
+            ctrl.setLoggedInUser(UserModel.getCurrentUser()); 
         }
     }
 }
