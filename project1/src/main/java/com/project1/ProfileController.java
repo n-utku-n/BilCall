@@ -95,8 +95,10 @@ private void handleBackButton(ActionEvent event) {
 private void handleApplicationButton(ActionEvent event) {
     FXMLLoader loader = SceneChanger.switchScene(event, "student_leadership_request.fxml");
     if (loader != null) {
+        Parent root = loader.getRoot();
+        root.getStylesheets().add(getClass().getResource("/style/studentLeadership.css").toExternalForm());
         LeadershipRequestController ctrl = loader.getController();
-        ctrl.setUser(UserModel.getCurrentUser()); // BU SATIR ŞART
+        ctrl.setUser(UserModel.getCurrentUser());
     }
 }
 
@@ -155,6 +157,9 @@ public void setUser(UserModel user) {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    } else {
+        clubCardContainer.setVisible(false);
+        clubCardContainer.setManaged(false);
     }
 
     // 6. Kullanıcının katıldığı etkinlikleri yükle

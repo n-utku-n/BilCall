@@ -108,6 +108,11 @@ public class AdminDashboardController {
     }
 
     @FXML
+    private void handleLogOut(ActionEvent event) {
+        SceneChanger.switchScene(event, "welcome.fxml");
+    }
+
+    @FXML
 private void onOpenLeadershipRequests(ActionEvent event) {
     try {
         SceneChanger.switchScene(event, "admin_leadership_requests.fxml");

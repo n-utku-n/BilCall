@@ -4,10 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.project1.LeadershipRequestController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.project1.LeadershipRequestController" styleClass="anchor-pane">
     <VBox alignment="TOP_CENTER" spacing="15.0" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
 
-        <Label text="Apply for Club Leadership" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+        <Label text="Apply for Club Leadership" styleClass="label" />
 
         <VBox fx:id="clubListContainer" spacing="10.0" />
 

@@ -215,8 +215,6 @@ public class CommentsController {
             );
             ctrl.setCurrentUserId(currentUserId);
             ctrl.setRefreshCommentsCallback(this::loadCommentsAsync);
-            // Eğer CommentCardController içinde UserModel'e ihtiyaç varsa burada iletebilirsin!
-            // ctrl.setCurrentUser(currentUser);
             return new VBox(card);
         } catch (IOException e) {
             e.printStackTrace();

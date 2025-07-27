@@ -47,8 +47,10 @@
       <Pane HBox.hgrow="ALWAYS"/>
 
       <!-- Menü Öğeleri -->
-      <Label text="Contacts"  styleClass="menu-item"/>
-      <Label text="Campaigns" styleClass="menu-item"/>
+     <ComboBox fx:id="sortComboBox"
+          promptText="Sort Events"
+          onAction="#handleSortSelection"
+          styleClass="sort-combobox"/>
 
       <!-- Profil Butonu (Dikkat: Sadece profile-button class!) -->
       <Button fx:id="profileButton"

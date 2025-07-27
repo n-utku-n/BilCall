@@ -30,6 +30,7 @@ import java.util.Map;
 import com.google.cloud.Timestamp;
 import com.project1.SceneChanger;
 import javafx.event.ActionEvent;
+import javafx.scene.control.ComboBox;
 
 /**
  * Controller class for the main dashboard accessible by student and club_manager roles.
@@ -58,27 +59,68 @@ public class MainDashboardController {
     
      @FXML
     private FlowPane mainEventContainer;// VBox yerine FlowPane
-    
+
+        @FXML
+    private ComboBox<String> sortComboBox;
+    private UserModel loggedInUser;
 
 
 
 @FXML
 public void initialize() {
     System.out.println("🔥 initialize() çalıştı!");
-    // 1) Logo önce
     loadAppLogo();
 
+    // Populate sorting ComboBox
+    sortComboBox.getItems().addAll(
+        "Highest Rated",
+        "Lowest Rated",
+        "Joined Clubs",
+        "Most Popular",
+        "Most Participants",
+        "Least Participants",
+        "Upcoming Events"
+    );
 
-    // 3) Arama alanı dinleyicisi
+    // Arama alanı dinleyicisi
     searchField.textProperty().addListener((obs, oldVal, newVal) -> handleSearch(null));
 
-    // 4) Tam ekran ayarı (istiyorsanız)
     Platform.runLater(() -> {
         Stage stage = (Stage) mainEventContainer.getScene().getWindow();
         stage.setMaximized(true);
     });
 }
-    private UserModel loggedInUser;
+
+@FXML
+private void handleSortSelection(ActionEvent event) {
+    String selected = sortComboBox.getValue();
+    System.out.println("🔃 Sorting selected: " + selected);
+
+    switch (selected) {
+        case "Highest Rated":
+            loadEventsSortedByRating(true);
+            break;
+        case "Lowest Rated":
+            loadEventsSortedByRating(false);
+            break;
+        case "Joined Clubs":
+            loadEventsFromJoinedClubs();
+            break;
+        case "Most Popular":
+        case "Most Participants":
+            loadEventsSortedByParticipantCount(true);
+            break;
+        case "Least Participants":
+            loadEventsSortedByParticipantCount(false);
+            break;
+        case "Upcoming Events":
+            loadUpcomingEvents();
+            break;
+        default:
+            loadEvents(); // default
+    }
+}
+    
 
    @FXML
 private void handleSearch(ActionEvent event) {
@@ -153,6 +195,7 @@ private void handleSearch(ActionEvent event) {
      */
     public void setLoggedInUser(UserModel user) {
         this.loggedInUser = user;
+        System.out.println("👤 studentId = " + user.getStudentId());
         System.out.println("❇ setLoggedInUser: clubId=" + user.getClubId() + ", clubName=" + user.getClubName());
         loadEvents();
     }
@@ -408,4 +451,179 @@ private void uploadDummyEventsToFirestore() {
 }
 
     
+
+
+// --- Sorting and Filtering Methods ---
+
+private void loadEventsSortedByRating(boolean descending) {
+    mainEventContainer.getChildren().clear();
+
+    try {
+        List<com.google.cloud.firestore.QueryDocumentSnapshot> documents = com.google.firebase.cloud.FirestoreClient
+                .getFirestore()
+                .collection("events")
+                .orderBy("averageRating", descending ? com.google.cloud.firestore.Query.Direction.DESCENDING : com.google.cloud.firestore.Query.Direction.ASCENDING)
+                .get()
+                .get()
+                .getDocuments();
+
+        for (com.google.cloud.firestore.QueryDocumentSnapshot doc : documents) {
+            addEventCardIfUpcoming(doc);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+private void loadEventsSortedByParticipantCount(boolean descending) {
+    mainEventContainer.getChildren().clear();
+
+    try {
+        List<com.google.cloud.firestore.QueryDocumentSnapshot> documents = com.google.firebase.cloud.FirestoreClient
+                .getFirestore()
+                .collection("events")
+                .orderBy("currentParticipants", descending ? com.google.cloud.firestore.Query.Direction.DESCENDING : com.google.cloud.firestore.Query.Direction.ASCENDING)
+                .get()
+                .get()
+                .getDocuments();
+
+        for (com.google.cloud.firestore.QueryDocumentSnapshot doc : documents) {
+            addEventCardIfUpcoming(doc);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+private void loadEventsFromJoinedClubs() {
+    System.out.println("💡 loadEventsFromJoinedClubs() çağrıldı.");
+    mainEventContainer.getChildren().clear();
+    List<String> joinedClubIds = new ArrayList<>();
+    String studentId = loggedInUser.getStudentId();
+    String currentUserId = null;
+
+    try {
+        com.google.cloud.firestore.Firestore db = com.google.firebase.cloud.FirestoreClient.getFirestore();
+        com.google.cloud.firestore.QuerySnapshot userSnapshots = db.collection("users")
+                .whereEqualTo("studentId", studentId)
+                .get()
+                .get();
+        List<com.google.cloud.firestore.QueryDocumentSnapshot> userDocs = userSnapshots.getDocuments();
+        if (!userDocs.isEmpty()) {
+            currentUserId = userDocs.get(0).getId(); // document ID is UID
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    try {
+        com.google.cloud.firestore.Firestore db = com.google.firebase.cloud.FirestoreClient.getFirestore();
+        List<com.google.cloud.firestore.QueryDocumentSnapshot> clubDocs = db
+                .collection("clubs")
+                .get()
+                .get()
+                .getDocuments();
+
+        System.out.println("📘 Kulüpler döngüsüne girildi.");
+        for (com.google.cloud.firestore.QueryDocumentSnapshot clubDoc : clubDocs) {
+            String clubId = clubDoc.getId();
+            List<String> participants = (List<String>) clubDoc.get("participants");
+
+            System.out.println("🟢 CLUB: " + clubId);
+            System.out.println("👤 Current User ID: " + currentUserId);
+            System.out.println("👥 Participants: " + participants);
+
+            if (participants != null && currentUserId != null && participants.contains(currentUserId)) {
+                System.out.println("✅ MATCH: User joined club " + clubId);
+                joinedClubIds.add(clubId);
+            } else {
+                System.out.println("❌ NO MATCH for " + clubId);
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return;
+    }
+    if (joinedClubIds.isEmpty()) return;
+
+    try {
+        List<com.google.cloud.firestore.QueryDocumentSnapshot> documents = com.google.firebase.cloud.FirestoreClient
+                .getFirestore()
+                .collection("events")
+                .get()
+                .get()
+                .getDocuments();
+
+        for (com.google.cloud.firestore.QueryDocumentSnapshot doc : documents) {
+            String clubId = doc.getString("clubId");
+            if (clubId != null && joinedClubIds.contains(clubId)) {
+                addEventCardIfUpcoming(doc);
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+private void addEventCardIfUpcoming(com.google.cloud.firestore.QueryDocumentSnapshot doc) {
+    try {
+        com.google.cloud.Timestamp ts = doc.getTimestamp("eventDate");
+        if (ts != null && ts.toDate().before(new java.util.Date())) return;
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/event_card.fxml"));
+        VBox eventCard = loader.load();
+        EventCardController controller = loader.getController();
+        controller.setCurrentUser(loggedInUser);
+
+        Map<String, Object> data = doc.getData();
+        String clubId = doc.getString("clubId");
+
+        if (clubId != null && !clubId.isEmpty()) {
+            try {
+                com.google.cloud.firestore.DocumentSnapshot clubDoc = com.google.firebase.cloud.FirestoreClient.getFirestore()
+                        .collection("clubs")
+                        .document(clubId)
+                        .get()
+                        .get();
+                if (clubDoc.exists()) {
+                    data.put("clubName", clubDoc.getString("name"));
+                    data.put("logoUrl", clubDoc.getString("logoUrl"));
+                }
+            } catch (Exception ignored) {
+                data.put("clubName", "Unknown Club");
+            }
+        } else {
+            data.put("clubName", "Unknown Club");
+        }
+
+        controller.setData(doc.getId(), data);
+        mainEventContainer.getChildren().add(eventCard);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+private void loadUpcomingEvents() {
+    mainEventContainer.getChildren().clear();
+
+    try {
+        List<com.google.cloud.firestore.QueryDocumentSnapshot> documents = com.google.firebase.cloud.FirestoreClient
+                .getFirestore()
+                .collection("events")
+                .orderBy("eventDate", com.google.cloud.firestore.Query.Direction.ASCENDING)
+                .get()
+                .get()
+                .getDocuments();
+
+        for (com.google.cloud.firestore.QueryDocumentSnapshot doc : documents) {
+            addEventCardIfUpcoming(doc);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 }

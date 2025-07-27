@@ -1,4 +1,11 @@
 package com.project1;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
+import com.google.firebase.cloud.FirestoreClient;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 
 /**
  * Model class representing a user in the application.
@@ -23,6 +30,7 @@ public class UserModel {
     private String clubId;
     private String clubName;
     private String uid;
+    private String userId;
     private static UserModel currentUser;
 
     /**
@@ -57,6 +65,8 @@ public class UserModel {
     }
     public String getUid() { return uid; }
     public void setUid(String uid) { this.uid = uid; }
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
     /** @return the user's last name */
     public String getSurname() {
         return surname;
@@ -122,5 +132,29 @@ public class UserModel {
     }
         public static void setCurrentUser(UserModel user) {
         currentUser = user;
+    }
+
+
+    /**
+     * Returns a list of club IDs that this user follows.
+     * Checks Firestore "clubs" collection for club documents where this user's UID is in the followers array.
+     * @return List of followed club IDs.
+     */
+    public List<String> getFollowedClubs() {
+        List<String> followedClubs = new ArrayList<>();
+        Firestore db = FirestoreClient.getFirestore();
+        try {
+            ApiFuture<QuerySnapshot> future = db.collection("clubs").get();
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+            for (QueryDocumentSnapshot doc : documents) {
+                List<String> followers = (List<String>) doc.get("followers");
+                if (followers != null && followers.contains(this.uid)) {
+                    followedClubs.add(doc.getId());
+                }
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return followedClubs;
     }
 }

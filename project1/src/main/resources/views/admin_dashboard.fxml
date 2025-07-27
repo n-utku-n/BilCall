@@ -122,6 +122,13 @@
             </VBox>
 
         </VBox>
-    </ScrollPane>
+</ScrollPane>
+
+    <Button fx:id="logOutButton"
+            text="Log Out"
+            onAction="#handleLogOut"
+            AnchorPane.bottomAnchor="15"
+            AnchorPane.rightAnchor="30"
+            styleClass="button" />
 
 </AnchorPane>

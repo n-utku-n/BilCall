@@ -45,6 +45,7 @@ public class AdminLeadershipRequestsController implements Initializable {
 
                     Platform.runLater(() -> {
                         Label msg = new Label(email + " applied for " + clubName);
+                        msg.getStyleClass().add("label");
                         Button deleteBtn = new Button("🗑️");
 
                         deleteBtn.setOnAction(e -> handleDelete(requestId));
