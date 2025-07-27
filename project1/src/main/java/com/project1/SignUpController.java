@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.google.cloud.firestore.Firestore;
+import com.google.api.services.storage.Storage.Projects.HmacKeys.Create;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.firebase.cloud.FirestoreClient;
 import javafx.fxml.FXML;
@@ -59,40 +60,40 @@ public class SignUpController {
         String role = "student";
 
         if (!email.endsWith("@ug.bilkent.edu.tr")) {
-            System.out.println("⚠️ Sadece Bilkent mail adresiyle kayıt olunabilir.");
+            System.out.println(" Please use a Bilkent University email address.");
             errorLabel.setText("Please use a Bilkent University email address.");
             return;
         }
 
         if (password.length() < 6) {
-            System.out.println("⚠️ Şifre en az 6 karakter olmalıdır.");
+            System.out.println(" Password must be at least 6 characters long.");
             errorLabel.setText("Password must be at least 6 characters long.");
             return;
         }
 
          try {
-            // 1) Firebase Auth ile kullanıcı oluştur
+            //Create a user with Firebase Auth
             CreateRequest request = new CreateRequest()
                 .setEmail(email)
                 .setPassword(password)
                 .setDisplayName(name + " " + surname);
             UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
             String uid = userRecord.getUid();
-            System.out.println("✅ Kullanıcı oluşturuldu: " + uid);
+            System.out.println("User created: " + uid);
 
-            // 2) Firestore için UserModel oluştur ve tüm alanları set et
+            //Create UserModel for Firestore and set all fields
             UserModel user = new UserModel(name, surname, studentId, email, role);
             user.setUid(uid);
-            // Eğer rolü ileride "club_manager" ise:
+            //if the role is "club_manager" in the future:
             // user.setClubId(selectedClubId);
             // user.setClubName(selectedClubName);
 
             Firestore db = FirestoreClient.getFirestore();
             DocumentReference docRef = db.collection("users").document(uid);
             docRef.set(user);
-            System.out.println("✅ Firestore'a kullanıcı kaydedildi.");
+            System.out.println("User registered to Firestore.");
 
-            // 3) Dashboard'a geçiş: MainDashboardController.setLoggedInUser(user) çağrılacak
+           //Switch to Dashboard: MainDashboardController.setLoggedInUser(user) will be called
             SceneChanger.switchScene(event, "main_dashboard.fxml", controller -> {
                 if (controller instanceof MainDashboardController mainCtrl) {
                     mainCtrl.setLoggedInUser(user);
@@ -100,7 +101,7 @@ public class SignUpController {
             });
 
         } catch (Exception e) {
-            System.out.println("❌ Kayıt başarısız: " + e.getMessage());
+            System.out.println("Registration failed. " + e.getMessage());
             errorLabel.setText("Registration failed." +e.getMessage()+ " Please try again.");
         }
     }

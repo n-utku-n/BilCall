@@ -106,7 +106,9 @@ private void handleSelectLogo(ActionEvent event) {
 
         } catch (Exception e) {
             e.printStackTrace();
+
             showAlert(Alert.AlertType.ERROR, " Failed to upload logo: " + e.getMessage());
+
         }
 
     } else {

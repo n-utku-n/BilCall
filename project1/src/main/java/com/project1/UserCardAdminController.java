@@ -19,7 +19,9 @@ public class UserCardAdminController {
     @FXML private Button deleteButton;
 
     private String userId;
+
     private String currentClub; 
+
     private Firestore db;
 
     public void initialize() {
