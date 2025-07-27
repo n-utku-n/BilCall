@@ -69,20 +69,20 @@ public class ProfileController implements Initializable {
 
 @FXML
 private void handleBackButton(ActionEvent event) {
-    // 1) Geri dönerken kim dönecek? viewerUser varsa o, yoksa profileUser
+    
     UserModel who = (viewerUser != null) ? viewerUser : profileUser;
     String role = who.getRole().toLowerCase();
 
-    // 2) Hedef fxml'i belirle
+ 
     String targetFxml = role.equals("admin")
          ? "admin_dashboard.fxml"
          : "main_dashboard.fxml";
 
-    // 3) Sahne değiştir
+    
     FXMLLoader loader = SceneChanger.switchScene(event, targetFxml);
     if (loader == null) return;
 
-    // 4) Geri dönerken controller’a kim döndüyse onu aktar
+   
     if (role.equals("admin")) {
         AdminDashboardController adm = loader.getController();
         adm.setLoggedInUser(who);
@@ -115,25 +115,25 @@ public void setUser(UserModel user) {
         return;
     }
 
-    // 1. Temel atamalar
-    this.loggedInUser = user;            // 🔥 En kritik satır — bug'ı çözüyor
+    
+    this.loggedInUser = user;           
     this.profileUser = user;
     UserModel.setCurrentUser(user);
 
-    // 2. Label'lara kullanıcı bilgisi yaz
+  
     nameLabel.setText(user.getName() != null ? user.getName() : "N/A");
     surnameLabel.setText(user.getSurname() != null ? user.getSurname() : "N/A");
     emailLabel.setText(user.getEmail() != null ? user.getEmail() : "N/A");
     roleLabel.setText(user.getRole() != null ? user.getRole() : "N/A");
 
-    // 3. Kulüp yöneticisi mi?
+      
     boolean isClubManagerProfile = "club_manager".equalsIgnoreCase(user.getRole());
     createEventButton.setVisible(isClubManagerProfile);
     createEventButton.setManaged(isClubManagerProfile);
     editClubButton.setVisible(isClubManagerProfile);
     editClubButton.setManaged(isClubManagerProfile);
 
-    // 4. Eğer viewerUser bir admin ve başkasının profiline bakıyorsa, butonları kapat
+  
     if (viewerUser != null
             && "admin".equalsIgnoreCase(viewerUser.getRole())
             && !viewerUser.getStudentId().equals(profileUser.getStudentId())) {
@@ -144,7 +144,7 @@ public void setUser(UserModel user) {
         editClubButton.setManaged(false);
     }
 
-    // 5. Kulüp kartını yükle
+   
     if (isClubManagerProfile) {
         clubCardContainer.getChildren().clear();
         try {
@@ -162,10 +162,10 @@ public void setUser(UserModel user) {
         clubCardContainer.setManaged(false);
     }
 
-    // 6. Kullanıcının katıldığı etkinlikleri yükle
+    
     loadJoinedEvents(user.getStudentId());
 
-    // 7. Admin view'da log out & application button'larını gizle
+    
     if (viewerUser != null && "admin".equalsIgnoreCase(viewerUser.getRole())) {
         logOutButton.setVisible(false);
         logOutButton.setManaged(false);
@@ -231,15 +231,15 @@ public void setUser(UserModel user) {
         try {
             DocumentSnapshot doc = db.collection("users").document(uid).get().get();
             if (doc.exists()) {
-                // 1) Kullanıcı nesnesini oluştur
+               
                 UserModel user = doc.toObject(UserModel.class);
                 user.setClubId(doc.getString("clubId"));
                 user.setClubName(doc.getString("clubName"));
 
-                // ↓ BURAYA EKLEYİN: static currentUser olarak ata
+                
                 UserModel.setCurrentUser(user);
 
-                // 2) UI güncellemesini UI thread’de yap
+                
                 Platform.runLater(() -> setUser(user));
             }
         } catch (Exception ex) {
@@ -253,20 +253,20 @@ private void handleCreateEventButton(ActionEvent event) {
     FXMLLoader loader = SceneChanger.switchScene(event, "create_event.fxml");
     CreateEventController cec = loader.getController();
 
-    // Ana kullanıcıyı ilet
+
     cec.setUser(loggedInUser);
 
-    // clubId ve clubName kontrolü
+  
     String clubId = loggedInUser.getClubId();
     String clubName = loggedInUser.getClubName();
 
     if (clubId == null || clubName == null) {
-        System.err.println("[HATA] Kullanıcıya ait clubId veya clubName null geldi.");
-        // Gerekirse burada fallback logic yazılabilir
+        System.err.println("[ERROR] The user's clubId or clubName is null.");
+       
         new Alert(Alert.AlertType.ERROR, 
-                  "Kulüp bilgilerine ulaşılamadı. Lütfen tekrar giriş yapın veya sistem yöneticisine başvurun.")
+                  "Club information could not be accessed. Please log in again or contact the system administrator.")
                   .showAndWait();
-        return; // Event ekranına geçme
+        return; 
     }
 
     cec.setClubInfo(clubId, clubName);
