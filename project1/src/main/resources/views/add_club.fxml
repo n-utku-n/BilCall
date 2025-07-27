@@ -23,8 +23,8 @@
             </HBox>
 
             <HBox spacing="20" alignment="CENTER">
-                <Button text="🔙 Back" onAction="#handleBackButton" />
-                <Button text="✅ Create Club" onAction="#handleCreateClub" />
+                <Button text=" Back" onAction="#handleBackButton" />
+                <Button text=" Create Club" onAction="#handleCreateClub" />
             </HBox>
 
         </VBox>

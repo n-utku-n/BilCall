@@ -38,10 +38,10 @@ public class App extends Application {
         System.setProperty("prism.debug",   "false");
         System.setProperty("prism.verbose", "false");
         System.setProperty("javafx.debug",  "false");
-        // 2) Firebase’i initialize et
+        // Initialize firebase
         FirebaseInitializer.initialize();
 
-        // 3) JavaFX uygulamasını başlat
+        // Launch the JavaFX 
         launch(args);
     }
 }

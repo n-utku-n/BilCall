@@ -58,17 +58,17 @@ public class ForgotPasswordController {
 
             int responseCode = conn.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                infoLabel.setText("✅ Check your email for the reset link.");
+                infoLabel.setText("Check your email for the reset link.");
                 infoLabel.getStyleClass().remove("error-label");
                 infoLabel.getStyleClass().add("feedback-label");
             } else {
-                infoLabel.setText("❌ Error sending reset link.");
+                infoLabel.setText("Error sending reset link.");
                 infoLabel.getStyleClass().add("error-label");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            infoLabel.setText("❌ Unexpected error occurred.");
+            infoLabel.setText("Unexpected error occurred.");
             infoLabel.getStyleClass().add("error-label");
         }
     }
@@ -83,7 +83,7 @@ public class ForgotPasswordController {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            infoLabel.setText("❌ Failed to return to Sign In screen.");
+            infoLabel.setText("Failed to return to Sign In screen.");
             infoLabel.getStyleClass().add("error-label");
         }
     }

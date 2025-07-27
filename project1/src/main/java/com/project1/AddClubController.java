@@ -3,7 +3,6 @@ package com.project1;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.firebase.cloud.FirestoreClient;
@@ -11,7 +10,6 @@ import com.google.firebase.cloud.StorageClient;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -73,7 +71,7 @@ private void handleSelectLogo(ActionEvent event) {
         logoFileNameLabel.setText(selectedLogoFile.getName());
 
         try {
-            // Dosya uzantısından MIME tipi belirle
+            // file type
             String fileNameLower = selectedLogoFile.getName().toLowerCase();
             String contentType;
             if (fileNameLower.endsWith(".png")) contentType = "image/png";
@@ -84,7 +82,7 @@ private void handleSelectLogo(ActionEvent event) {
                 return;
             }
 
-            // Logo dosyasını Firebase'e yükle
+            // Upload lgo to firebase
             String logoFileName = "logos/" + UUID.randomUUID() + selectedLogoFile.getName().substring(selectedLogoFile.getName().lastIndexOf('.'));
             String downloadToken = UUID.randomUUID().toString();
             String bucketName = StorageClient.getInstance().bucket().getName();
@@ -99,16 +97,18 @@ private void handleSelectLogo(ActionEvent event) {
                 StorageClient.getInstance().bucket().getStorage().create(blobInfo, logoStream);
             }
 
-            // Public URL oluştur
+            // Public URL 
             logoUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucketName + "/o/"
                     + logoFileName.replace("/", "%2F")
                     + "?alt=media&token=" + downloadToken;
 
-            System.out.println("✅ Logo uploaded to Firebase: " + logoUrl);
+            System.out.println(" Logo uploaded to Firebase: " + logoUrl);
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Failed to upload logo: " + e.getMessage());
+
+            showAlert(Alert.AlertType.ERROR, " Failed to upload logo: " + e.getMessage());
+
         }
 
     } else {
@@ -153,12 +153,12 @@ private void handleCreateClub(ActionEvent event) {
         clubData.put("name", name);
         clubData.put("description", description);
         clubData.put("foundationDate", foundationDate.toString());
-        clubData.put("logoUrl", logoUrl);  // logoUrl artık token içeren geçerli URL
+        clubData.put("logoUrl", logoUrl);  
         clubData.put("managers", new java.util.ArrayList<>());
 
         // Add to Firestore
         ApiFuture<DocumentReference> result = db.collection("clubs").add(clubData);
-        result.get(); // Wait until write completes
+        result.get();
 
         showAlert(Alert.AlertType.INFORMATION, " Club created successfully!");
         SceneChanger.switchScene(event, "admin_dashboard.fxml");
