@@ -1,0 +1,44 @@
+0. Learning JavaFX Components
+• Task: Studied and practiced the fundamental JavaFX components, including layouts, and properties, to understand their behavior and how to integrate them effectively into the application’s UI.
+• Date: June 18, 2025
+• Time Spent: ~3.5 hours
+
+1. Event Handling in JavaFX
+• Task: Explored event-driven programming concepts in JavaFX, implemented event listeners and handlers for various UI elements, and ensured proper response to user actions such as clicks and input events.
+• Date: June 20, 2025
+• Time Spent: ~1.5 hours
+
+2. Communication Between Controllers
+• Task: Developed and tested methods for passing data and commands between multiple JavaFX controllers, focusing on maintaining state consistency and enabling interaction between different UI screens.
+• Date: June 21, 2025
+• Time Spent: ~1.5 hours
+
+3. Using Scene Builder
+• Task: Learned to design user interfaces with Scene Builder, creating FXML files visually to build complex layouts more efficiently and integrating these with Java controllers.
+• Date: July 5, 2025
+• Time Spent: ~2.5 hours
+
+4. Project Setup
+• Task: Set up the project environment by cloning the GitHub repository, configuring JavaFX dependencies, ensuring version control was operational, and preparing the workspace for further development.
+• Date: July 6, 2025
+• Time Spent: ~1 hour
+
+5. FXML Learning
+• Task: Implemented the UI logic by linking FXML files to their respective Java controllers, separating view from business logic, and handling user interface events and data binding effectively.
+• Date: July 7, 2025
+• Time Spent: ~3 hours
+
+6. AdminHomeController.java Implementation
+• Task: Developed the Admin Home Controller’s core functionality, including managing user interface elements such as buttons.
+• Date: July 13, 2025
+• Time Spent: ~4.5–5 hours
+
+7. Layout Styling Adjustments
+• Task: Refined the overall UI design by applying consistent styling, adjusting layouts for responsiveness, and improving the user experience through better aesthetics. 
+• Date: July 17, 2025
+• Time Spent: ~3 hours
+
+8. Reporting & Presentation Participation
+• Task: Contributed actively to the creation and editing of project documentation, including reports and presentation slides, coordinated with teammates to consolidate information, and prepared materials for final project delivery.
+• Date: Throughout the project
+• Time Spent: ~10–15 hours
