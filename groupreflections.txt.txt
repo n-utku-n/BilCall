@@ -1,0 +1,31 @@
+Group Reflection
+Group 2
+Project Reflection: BilCall
+Working on the BilCall project was both an educational and challenging experience for us as a team. Applying Java, JavaFX, Firebase, and software design principles in a real-world project was initially quite difficult. We developed a club and event management system, including features such as live search, dynamic sorting, image uploading, Firebase authentication, and Firestore integration.
+
+We used Firebase as a NoSQL database system and integrated Firebase Storage, Firebase Authentication, and Firestore Database services. We stored our data in a document-based structured format, while also using Firebase services for user sessions and image uploads.
+We designed our FXML layouts using Scene Builder, which saved us time and reduced errors, especially in complex UI designs with the help of those technologies we succesfuly separated backend and frontend.
+
+To build the project in a modular and maintainable way, we used Maven. We managed all required dependencies through the pom.xml file. Instead of adding external libraries like JavaFX, Firebase SDK, Firestore Client, and testing libraries manually, we were able to automatically download and configure them via Maven. This made the build process easier and ensured version compatibility throughout development.
+
+We used Git and GitHub for version control and collaborated through a shared repository. Although we occasionally encountered merge conflicts, this actually helped us improve our communication and commit discipline as a team. We need to ope a new repo during the developing phase and we informed the TA. We only uploaded the updated version without firebase key.
+What we learned: 
+We learned how to design a scalable and maintainable application using JavaFX. Working with Firebase helped us understand how to manage asynchronous data operations. Designing an  UI with FXML and CSS also strengthened our front-end development skills.
+
+Challenges we faced:
+The most difficult part was managing scene transitions, loading controllers properly, using github, and debugging FXML mismatches. Another major challenge was dynamically setting the current user on each controller page to prevent data loss or null values. Managing multiple databases simultaneously required careful planning, so we first designed our database structure on paper before implementation. We shaped users, events, and clubs based on this structure.
+Merge conflicts during Git operations were time-consuming, but tools like GitKraken helped us view and revert to older versions. Additionally, integrating Firebase into the application in the early stages was also a struggle.
+
+What we didn’t like:
+At times, team coordination was difficult—especially when tasks were not clearly defined. There were moments of communication breakdown within the group, but we tried to resolve these by meeting frequently and calling each other when needed. Working with Firestore’s deeply nested structures was mentally exhausting. Also, the frequent NullPointerException errors in JavaFX caused significant time loss. 
+To prevent the UI from freezing and provide a smooth user experience, we had to learn and implement structures like Thread, Task, and Platform.runLater(). We moved long-running operations (such as data fetching, sorting, and uploading) into separate threads and used Platform.runLater() to safely update the UI on the JavaFX Application Thread. This way, we could avoid freezing the interface and significantly improve performance.
+Although we had difficulty understanding these concepts at first, through trial and error, reading documentation, and helping each other, we eventually managed to apply these techniques correctly. These skills were especially useful in optimizing data loading, filtering, and dynamic search features. Our interface began to run more smoothly, and the overall user experience improved noticeably.
+
+What we would do differently:
+Before starting the project, we prepared a detailed system diagram and a class responsibility map. We also drew a more comprehensive and visually clear UI diagram, which we followed throughout development. In hindsight, instead of making an application for Bilkent, we wish we had tried to build something more playful—maybe a game-style app—which might have been less tiring and more enjoyable for a summer course.
+
+Time spent:
+We estimate that we spent a total of 175–250 hours on this project. This includes coding, debugging, UI design, and database integration.
+
+Final thoughts:
+Despite all the challenges, we are proud of what we have accomplished. The application is clean, functional, and supports real-time data processing. Turning our ideas into reality was truly satisfying. We believe that this project has helped us become better programmers and team players.
