@@ -1,0 +1,56 @@
+0. Relearning JavaFX and Firebase Basics
+	• Task: Reviewed JavaFX (FXML, controllers) and researched how to integrate Firebase Firestore with Java.
+	• Date: June 20–24, 2025
+	• Time Spent: ~10+ hours (tutorials, documentation, testing)
+
+1. Firestore Database Schema Design
+	• Task: Designed collections and structure for Firestore: users, events, clubs, club_applications, event_participants. Shared schema with teammates.
+	• Date: June 25–26, 2025
+	• Time Spent: ~3 hours
+
+2. UI & Design Planning
+	• Task: Sketched initial UI designs on paper and planned screen navigation and user experience flow.
+	• Date: June 27–29, 2025
+	• Time Spent: ~5 hours
+
+3. FXML and CSS Implementation
+	• Task: Implemented layout and styling manually through FXML for screens like MainDashboard, EventDetail, ClubProfile, and Profile. Added CSS for consistent design.
+	• Date: July 1–5, 2025
+	• Time Spent: ~12 hours
+
+4. Alert & Platform.runLater Integration
+	• Task: Learned and added alert popups for invalid inputs and platform-safe runLater calls for UI updates.
+	• Date: July 5–6, 2025
+	• Time Spent: ~3 hours
+
+5. Image Upload with Firebase URL
+	• Task: Implemented image selection and upload functionality with Firebase Storage; saved image URL to event document.
+	• Date: July 7–8, 2025
+	• Time Spent: ~4 hours
+
+6. Controller Logic & Data Binding
+	• Task: Wrote logic in controllers for user login, event creation, comments, and club following. Bound data to FXML elements.
+	• Date: July 8–14, 2025
+	• Time Spent: ~15+ hours
+
+7. Testing & Debugging
+	• Task: Extensively used logs, print statements, and debugging tools to fix bugs related to scene switching, null pointers, and data display.
+	• Date: Throughout July 2025
+	• Time Spent: ~10+ hours
+
+8. Implemented and Modified Methods in Controllers
+	• Task: Worked on the following classes and methods:
+AddClubController.java: handleSelectLogo(), handleBackButton(), handleCreateClub(), showAlert()
+AddCommentController.java: setEventContext(), setCurrentUser(), initialize(), setEditMode(), setRating(), handleBack(), handleSubmit(), saveNewComment(), updateComment(), closeWithSuccess()
+AddCommentTest.java: ClubCardAdminController.java: setDashboardController(), setData(), updateCounts(), handleDelete(), setParentController()
+ClubCardController.java: setCurrentUser(), setClubInfo(), setData(), setPreviousEventId(), handleView()
+ClubProfileController.java: setCurrentUser(), initialize(), setClubContext(), setClubId(), loadClubData(), loadClubEvents(), handleBack(), handleFollow()
+CommentCardController.java: setRefreshCommentsCallback(), setCurrentUserId(), setData(), handleEdit(), handleDelete(), updateActionsVisibility(), getCommentId(), getEventId(), getUserName(), getText(), getRating(), initialize()
+CommentsController.java: initialize(), setEventContext(), setCurrentUser(), handleBack(), handleAddComment(), loadCommentsAsync(), loadCommentsBlocking(), renderComments(), buildCommentCard()
+CreateEventController.java: getClubId(), getClubName(), setClubInfo(), populateForEdit(), setUser(), initialize(), handleBack(), handleChooseImage(), handleCreateEvent()
+EventCardController.java: setCurrentUser(), onCardClicked(), setData(), showAverageRating(), initializeComponents(), validateComponents(), populateEventDetails(), populateParticipantInfo(), positionMinParticipantLine(), loadImages(), loadClubLogo(), navigateToEventDetail(), handleDetails()
+EventDetailController.java: setLoggedInUser(), setEventData(), showClubError(), getString(), getNumber(), handleBack(), onJoinClicked(), onCommentsClicked(), onEditDetail(), onDeleteDetail(), setEventId(), onQuitClicked()
+MainDashboardController.java: initialize(), handleSortSelection(), handleSearch(), setLoggedInUser(), loadAppLogo(), loadEvents(), onProfileButtonClicked(), setUser(), loadAllEvents(), uploadDummyEventsToFirestore(), loadEventsSortedByRating(), loadEventsSortedByParticipantCount(), loadEventsFromJoinedClubs(), addEventCardIfUpcoming(), loadUpcomingEvents()
+ProfileController.java: initialize(), handleLogoutButton(), handleBackButton(), handleApplicationButton(), setUser(), setViewerUser(), loadJoinedEvents(), loadUser(), handleCreateEventButton(), handleEditClubButton()
+	• Date: Throughout project
+	• Time Spent: ~100+ hours
